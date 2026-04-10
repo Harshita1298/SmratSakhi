@@ -1,0 +1,10 @@
+const router = require('express').Router();
+const { getActiveOffers, validateCoupon, createOffer, getAllOffers, updateOffer, deleteOffer } = require('../controllers/offerController');
+const { protect, adminOnly } = require('../middleware/authMiddleware');
+router.get('/', getActiveOffers);
+router.post('/validate', validateCoupon);
+router.get('/admin', protect, adminOnly, getAllOffers);
+router.post('/admin', protect, adminOnly, createOffer);
+router.put('/admin/:id', protect, adminOnly, updateOffer);
+router.delete('/admin/:id', protect, adminOnly, deleteOffer);
+module.exports = router;
