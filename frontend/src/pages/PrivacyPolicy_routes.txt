@@ -1,0 +1,7 @@
+Add these to App.jsx Routes:
+<Route path="/privacy-policy"   element={<PrivacyPolicy />} />
+<Route path="/terms-of-service" element={<TermsOfService />} />
+
+And import at top:
+import PrivacyPolicy  from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
