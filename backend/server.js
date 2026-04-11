@@ -13,10 +13,16 @@ const app = express();
 // Middleware to parse JSON data
 app.use(express.json({ limit: "10mb" }));
 
-// Enable CORS to allow frontend requests
+// Enable CORS to allow frontend requests (normalize URL to drop trailing slash)
+const clientUrl = process.env.CLIENT_URL?.replace(/\/$/, '');
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // your frontend URL
+    origin: (incomingOrigin, callback) => {
+      if (!incomingOrigin || incomingOrigin === clientUrl) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
