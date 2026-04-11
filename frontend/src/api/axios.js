@@ -1,7 +1,7 @@
 // src/api/axios.js — Axios instance with auth header injection
 import axios from 'axios';
 
-const API = axios.create({ baseURL: '/api' });
+const API = axios.create({ baseURL: 'https://smratsakhi.onrender.com/api' });
 
 // Attach JWT token to every request
 API.interceptors.request.use((config) => {
