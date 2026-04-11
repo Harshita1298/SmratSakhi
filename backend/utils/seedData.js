@@ -71,8 +71,8 @@ const seed = async () => {
   console.log(`✅ ${offers.length} offers add ho gaaye`);
 
   await User.create({
-    name: 'Ranjana Ji', phone: '9936657399',
-    email: 'ranjana@sakhibeauty.in', password: 'sakhi@2025',
+    name: 'Smart-Sakhi', phone: '9936657399',
+    email: 'sakhibeauty988@gmail.com', password: 'harshita@28',
     role: 'admin', city: 'Gorakhpur',
     address: 'Jaitpur, Khajni Road, Gorakhpur UP',
     socialLinks: {
@@ -89,7 +89,7 @@ const seed = async () => {
   });
 
   console.log('✅ Admin users banaye gaye');
-  console.log('   Ranjana Ji: 9936657399 / sakhi@2025');
+  console.log('  Smart-Sakhi: 9936657399 / harshita@28');
   console.log('   Default:    9999999999 / admin123');
   process.exit(0);
 };
