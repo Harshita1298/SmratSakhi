@@ -133,7 +133,13 @@ export default function Gallery() {
                 )}
                 <div style={s.cardInfo}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={s.catPill}>{catEmoji[item.category]} {item.category}</span>
+                    <span style={s.catPill}>
+                      {catEmoji[item.category]}{' '}
+                      <LangText
+                        hi={getGalleryCategoryLabel(item.category)?.hi || item.category}
+                        en={getGalleryCategoryLabel(item.category)?.en || item.category}
+                      />
+                    </span>
                     <button onClick={e => { e.stopPropagation(); like(item._id); }} style={s.likeBtn}>♥ {item.likes}</button>
                   </div>
                   <div style={s.cardTitle2}>{item.title}</div>
@@ -189,6 +195,10 @@ export default function Gallery() {
       )}
     </div>
   );
+}
+
+function getGalleryCategoryLabel(category) {
+  return GALLERY_CATS.find(opt => opt.key === category)?.label;
 }
 
 const s = {

@@ -165,11 +165,27 @@ export default function Navbar() {
   );
 }
 
+const ADMIN_LINKS = [
+  { to: '/admin', label: '📊 Dashboard' },
+  { to: '/admin/add-booking', label: '+ Booking' },
+  { to: '/admin/bookings', label: '📋 Bookings' },
+  { to: '/admin/gallery', label: '📸 Posts' },
+  { to: '/admin/offers', label: '🎉 Offers' },
+  { to: '/admin/reviews', label: '⭐ Reviews' },
+  { to: '/admin/enquiries', label: '📩 Enquiries' },
+  { to: '/admin/notifications', label: '🔔 Notify' },
+  { to: '/admin/services', label: '💄 Services' },
+  { to: '/admin/reports', label: '📈 Reports' },
+  { to: '/admin/profile', label: '👤 Profile' },
+];
+
 // ── Admin Navbar ───────────────────────────────────────────────
 function AdminNav() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const closeAdminMenu = () => setAdminMenuOpen(false);
   const active = (p) => ({ ...aS.link, ...(location.pathname === p ? aS.activeLink : {}) });
 
   return (
@@ -179,29 +195,80 @@ function AdminNav() {
           <div style={{ width: 28, height: 28, background: '#e8637a', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>💄</div>
           <span>Sakhi <span style={{ color: '#c9973a', fontSize: 10 }}>ADMIN</span></span>
         </Link>
-        <div style={aS.links}>
-          <Link to="/admin"               style={active('/admin')}>📊 Dashboard</Link>
-          <Link to="/admin/add-booking"   style={active('/admin/add-booking')}>+ Booking</Link>
-          <Link to="/admin/bookings"      style={active('/admin/bookings')}>📋 Bookings</Link>
-          <Link to="/admin/gallery"       style={active('/admin/gallery')}>📸 Posts</Link>
-          <Link to="/admin/offers"        style={active('/admin/offers')}>🎉 Offers</Link>
-          <Link to="/admin/reviews"       style={active('/admin/reviews')}>⭐ Reviews</Link>
-          <Link to="/admin/enquiries"     style={active('/admin/enquiries')}>📩 Enquiries</Link>
-          <Link to="/admin/notifications" style={active('/admin/notifications')}>🔔 Notify</Link>
-          <Link to="/admin/services"      style={active('/admin/services')}>💄 Services</Link>
-          <Link to="/admin/reports"       style={active('/admin/reports')}>📈 Reports</Link>
-          <Link to="/admin/profile"       style={active('/admin/profile')}>👤 Profile</Link>
+        <div style={aS.links} className="admin-links">
+          {ADMIN_LINKS.map(link => (
+            <Link key={link.to} to={link.to} style={active(link.to)} onClick={closeAdminMenu}>
+              {link.label}
+            </Link>
+          ))}
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
+        <div style={aS.actions} className="admin-actions">
           <LangToggle />
-          <Link to="/" style={{ fontSize: 11, color: '#7a5560', padding: '5px 10px', background: '#2d1420', borderRadius: 8 }}>
+          <Link to="/" style={aS.userViewLink} onClick={closeAdminMenu}>
             <LangText hi="← उपयोगकर्ता दृश्य" en="← User View" />
           </Link>
           <button onClick={() => { logout(); navigate('/'); }} style={aS.logoutBtn}>
             <LangText hi="लॉग आउट" en="Logout" />
           </button>
+          <button
+            className="admin-hamburger"
+            type="button"
+            aria-label="Open admin menu"
+            style={aS.hamburger}
+            onClick={() => setAdminMenuOpen((prev) => !prev)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
       </div>
+
+      {adminMenuOpen && <div style={styles.mobileBackdrop} className="admin-mobile-backdrop" onClick={closeAdminMenu} />}
+      <div style={{ ...aS.mobileMenu, ...(adminMenuOpen ? aS.mobileMenuOpen : {}) }} className="admin-mobile-menu">
+        <div style={aS.mobileHeader}>
+          <strong style={{ fontSize: 16 }}>Admin Links</strong>
+          <button onClick={closeAdminMenu} style={styles.closeButton} aria-label="Close admin menu">✕</button>
+        </div>
+        <div style={aS.mobileLinks}>
+          {ADMIN_LINKS.map(link => (
+            <Link key={link.to} to={link.to} style={active(link.to)} onClick={closeAdminMenu}>
+              {link.label}
+            </Link>
+          ))}
+        </div>
+        <div style={aS.mobileActions}>
+          <LangToggle />
+          <Link to="/" style={aS.mobileAction} onClick={closeAdminMenu}>
+            <LangText hi="← उपयोगकर्ता दृश्य" en="← User View" />
+          </Link>
+          <button onClick={() => { logout(); navigate('/'); }} style={aS.mobileAction} type="button">
+            <LangText hi="लॉग आउट" en="Logout" />
+          </button>
+        </div>
+      </div>
+
+      <style>{`
+        .admin-links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+        .admin-actions { align-items: center; }
+        .admin-hamburger span {
+          display: block;
+          width: 20px;
+          height: 2px;
+          background: #fff;
+          margin: 3px 0;
+          transition: transform 0.2s;
+        }
+        @media (max-width: 960px) {
+          .admin-links { display: none !important; }
+          .admin-actions { gap: 4px; }
+          .admin-hamburger { display: flex !important; }
+        }
+        @media (min-width: 961px) {
+          .admin-hamburger { display: none !important; }
+          .admin-mobile-menu, .admin-mobile-backdrop { display: none !important; }
+        }
+      `}</style>
     </nav>
   );
 }
@@ -267,4 +334,30 @@ const aS = {
   link:     { padding: '6px 10px', borderRadius: 8, fontSize: 12, color: '#c8a4ae', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap' },
   activeLink:{ background: 'rgba(232,99,122,0.2)', color: '#e8637a' },
   logoutBtn:{ padding: '6px 12px', background: 'rgba(232,99,122,0.15)', color: '#e8637a', border: '1px solid rgba(232,99,122,0.3)', borderRadius: 8, fontSize: 11, cursor: 'pointer', fontFamily: "'Poppins',sans-serif" },
+  actions:  { display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 },
+  userViewLink: { fontSize: 11, color: '#7a5560', padding: '5px 10px', background: '#2d1420', borderRadius: 8, textDecoration: 'none' },
+  hamburger: { display: 'none', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, border: 'none', background: 'transparent', padding: 6, cursor: 'pointer' },
+  mobileMenu: {
+    position: 'fixed',
+    top: 'var(--nav-height)',
+    left: 0,
+    right: 0,
+    zIndex: 99,
+    background: '#1a0a0f',
+    borderTop: '1px solid #2d1420',
+    boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
+    transform: 'translateY(-16px)',
+    opacity: 0,
+    pointerEvents: 'none',
+    transition: 'opacity 0.25s ease, transform 0.25s ease',
+  },
+  mobileMenuOpen: {
+    transform: 'translateY(0)',
+    opacity: 1,
+    pointerEvents: 'auto',
+  },
+  mobileHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', borderBottom: '1px solid #2d1420', color: '#fff' },
+  mobileLinks: { display: 'flex', flexDirection: 'column', gap: 10, padding: '16px' },
+  mobileActions: { display: 'flex', flexDirection: 'column', gap: 12, padding: '16px', borderTop: '1px solid #2d1420' },
+  mobileAction: { borderRadius: 12, border: '1px solid #2d1420', padding: '10px 12px', textAlign: 'center', color: '#fff', fontWeight: 600, textDecoration: 'none', background: '#2d1420', cursor: 'pointer' },
 };

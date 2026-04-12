@@ -81,10 +81,8 @@ export default function Login() {
             </button>
           </form>
 
-          {/* Demo credentials hint */}
-          <div style={styles.demo}>
-            <strong>Demo Admin:</strong> 9999999999 / admin123
-          </div>
+    
+    
 
           <div style={styles.switchText}>
             Don't have an account?{' '}

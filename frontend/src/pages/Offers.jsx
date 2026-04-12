@@ -44,7 +44,15 @@ export default function Offers() {
         </p>
 
         {loading ? <div className="spinner" /> : offers.length === 0 ? (
-          <div className="empty-state"><div className="icon">🎉</div><h3>Abhi koi offer nahi</h3><p>Jald nayi offers aayengi!</p></div>
+          <div className="empty-state">
+            <div className="icon">🎉</div>
+            <h3>
+              <LangText hi="Abhi koi offer nahi" en="No offers right now" />
+            </h3>
+            <p>
+              <LangText hi="Jald nayi offers aayengi!" en="New offers coming soon!" />
+            </p>
+          </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {offers.map(offer => (
@@ -67,8 +75,12 @@ export default function Offers() {
 
                 <p style={s.desc}>{offer.description}</p>
 
-                {offer.minAmount > 0 && <p style={s.condition}>Minimum booking: ₹{offer.minAmount}</p>}
-                {offer.maxDiscount && <p style={s.condition}>Maximum discount: ₹{offer.maxDiscount}</p>}
+                {offer.minAmount > 0 && (
+                  <p style={s.condition}>{t('minBooking')} ₹{offer.minAmount}</p>
+                )}
+                {offer.maxDiscount && (
+                  <p style={s.condition}>{t('maxDiscount')} ₹{offer.maxDiscount}</p>
+                )}
 
                 {offer.couponCode && (
                   <div style={s.couponBox}>
