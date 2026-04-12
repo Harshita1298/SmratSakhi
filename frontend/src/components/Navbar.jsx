@@ -202,27 +202,28 @@ export default function Navbar() {
 }
 
 const ADMIN_LINKS = [
-  { to: '/admin', label: '📊 Dashboard' },
-  { to: '/admin/add-booking', label: '+ Booking' },
-  { to: '/admin/bookings', label: '📋 Bookings' },
-  { to: '/admin/gallery', label: '📸 Posts' },
-  { to: '/admin/offers', label: '🎉 Offers' },
-  { to: '/admin/reviews', label: '⭐ Reviews' },
-  { to: '/admin/enquiries', label: '📩 Enquiries' },
-  { to: '/admin/notifications', label: '🔔 Notify' },
-  { to: '/admin/services', label: '💄 Services' },
-  { to: '/admin/reports', label: '📈 Reports' },
-  { to: '/admin/profile', label: '👤 Profile' },
+  { to: '/admin', labelKey: 'adminDashboard', emoji: '📊' },
+  { to: '/admin/add-booking', labelKey: 'adminAddBooking', emoji: '+' },
+  { to: '/admin/bookings', labelKey: 'adminBookings', emoji: '📋' },
+  { to: '/admin/gallery', labelKey: 'adminGallery', emoji: '📸' },
+  { to: '/admin/offers', labelKey: 'adminOffers', emoji: '🎉' },
+  { to: '/admin/reviews', labelKey: 'adminReviews', emoji: '⭐' },
+  { to: '/admin/enquiries', labelKey: 'adminEnquiries', emoji: '📩' },
+  { to: '/admin/notifications', labelKey: 'adminNotifications', emoji: '🔔' },
+  { to: '/admin/services', labelKey: 'adminServices', emoji: '💄' },
+  { to: '/admin/reports', labelKey: 'adminReports', emoji: '📈' },
+  { to: '/admin/profile', labelKey: 'adminProfileLabel', emoji: '👤' },
 ];
 
 // ── Admin Navbar ───────────────────────────────────────────────
 function AdminNav() {
-  const { logout } = useAuth();
+  const { logout, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
   const closeAdminMenu = () => setAdminMenuOpen(false);
   const active = (p) => ({ ...aS.link, ...(location.pathname === p ? aS.activeLink : {}) });
+  const { t } = useLang();
 
   return (
     <nav style={aS.nav}>
@@ -234,7 +235,8 @@ function AdminNav() {
         <div style={aS.links} className="admin-links">
           {ADMIN_LINKS.map(link => (
             <Link key={link.to} to={link.to} style={active(link.to)} onClick={closeAdminMenu}>
-              {link.label}
+              <span style={{ marginRight: 4 }}>{link.emoji}</span>
+              {t(link.labelKey)}
             </Link>
           ))}
         </div>
@@ -263,13 +265,14 @@ function AdminNav() {
       {adminMenuOpen && <div style={styles.mobileBackdrop} className="admin-mobile-backdrop" onClick={closeAdminMenu} />}
       <div style={{ ...aS.mobileMenu, ...(adminMenuOpen ? aS.mobileMenuOpen : {}) }} className="admin-mobile-menu">
         <div style={aS.mobileHeader}>
-          <strong style={{ fontSize: 16 }}>Admin Links</strong>
+          <strong style={{ fontSize: 16 }}>{t('adminLinksTitle')}</strong>
           <button onClick={closeAdminMenu} style={styles.closeButton} aria-label="Close admin menu">✕</button>
         </div>
         <div style={aS.mobileLinks}>
           {ADMIN_LINKS.map(link => (
             <Link key={link.to} to={link.to} style={active(link.to)} onClick={closeAdminMenu}>
-              {link.label}
+              <span style={{ marginRight: 4 }}>{link.emoji}</span>
+              {t(link.labelKey)}
             </Link>
           ))}
         </div>
