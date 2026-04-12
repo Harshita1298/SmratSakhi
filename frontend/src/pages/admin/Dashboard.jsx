@@ -22,7 +22,7 @@ const adminNavItems = [
 ];
 
 export default function Dashboard() {
-  const { lang } = useLang();
+  const { lang, changeLang } = useLang();
   const location = useLocation();
   const [stats, setStats]   = useState(null);
   const [books, setBooks]   = useState([]);
@@ -97,13 +97,32 @@ export default function Dashboard() {
         </aside>
         <div className="admin-layout__content">
           <div className="container" style={{maxWidth:1200}}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:20,flexWrap:'wrap',gap:10}}>
+            <div className="admin-header">
               <div>
                 <h1 style={{fontSize:26,fontFamily:"'Playfair Display',serif"}}>{hi('Dashboard 👋','Dashboard 👋')}</h1>
                 <p style={{fontSize:13,color:'#7a5560'}}>{hi('Namaste Smart Sakhi! Aaj ka poora overview.','Welcome Smart Sakhi! Here is today\'s complete overview.')}</p>
-          </div>
-          <Link to="/admin/add-booking" className="btn btn-primary" style={{fontSize:13}}>+ {hi('Booking Jodiye','Add Booking')}</Link>
-        </div>
+              </div>
+              <div className="admin-header-actions">
+                <div className="lang-switcher">
+                  <span className="lang-switcher__label"><LangText hi="भाषा" en="Language" /></span>
+                  {[
+                    { value: 'en', label: <LangText hi="अंग्रेज़ी" en="English" /> },
+                    { value: 'hi', label: <LangText hi="हिंदी" en="Hindi" /> },
+                  ].map(opt=>(
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={`lang-switcher__btn ${lang===opt.value?'active':''}`}
+                      onClick={()=>opt.value!==lang && changeLang(opt.value)}
+                      aria-pressed={lang===opt.value}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                <Link to="/admin/add-booking" className="btn btn-primary" style={{fontSize:13}}>+ {hi('Booking Jodiye','Add Booking')}</Link>
+              </div>
+            </div>
 
         {/* Stats */}
         <div style={{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:10,marginBottom:14}}>
