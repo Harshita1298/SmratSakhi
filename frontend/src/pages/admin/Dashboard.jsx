@@ -124,6 +124,9 @@ export default function Dashboard() {
                 <Link to="/profile" className="btn btn-outline btn-sm">
                   <LangText hi="उपयोगकर्ता खाते" en="User Account" />
                 </Link>
+                <Link to="/admin" className="btn btn-outline btn-sm">
+                  <LangText hi="डैशबोर्ड" en="Dashboard" />
+                </Link>
                 <Link to="/admin/add-booking" className="btn btn-primary" style={{fontSize:13}}>+ {hi('Booking Jodiye','Add Booking')}</Link>
               </div>
             </div>
