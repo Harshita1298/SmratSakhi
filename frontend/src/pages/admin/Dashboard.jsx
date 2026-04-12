@@ -99,6 +99,7 @@ export default function Dashboard() {
           <div className="container" style={{maxWidth:1200}}>
             <div className="admin-header">
               <div>
+                <p className="admin-header__brand">Sakhi Beauty Parlour</p>
                 <h1 style={{fontSize:26,fontFamily:"'Playfair Display',serif"}}>{hi('Dashboard 👋','Dashboard 👋')}</h1>
                 <p style={{fontSize:13,color:'#7a5560'}}>{hi('Namaste Smart Sakhi! Aaj ka poora overview.','Welcome Smart Sakhi! Here is today\'s complete overview.')}</p>
               </div>
@@ -120,6 +121,9 @@ export default function Dashboard() {
                     </button>
                   ))}
                 </div>
+                <Link to="/profile" className="btn btn-outline btn-sm">
+                  <LangText hi="उपयोगकर्ता खाते" en="User Account" />
+                </Link>
                 <Link to="/admin/add-booking" className="btn btn-primary" style={{fontSize:13}}>+ {hi('Booking Jodiye','Add Booking')}</Link>
               </div>
             </div>

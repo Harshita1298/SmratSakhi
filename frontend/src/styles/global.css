@@ -236,6 +236,14 @@ h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; line-height: 1.2; }
 .lang-switcher__btn:not(.active):hover {
   background: var(--rose-light);
 }
+.admin-header__brand {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--rose-dark);
+  margin-bottom: 4px;
+}
 
 @media (max-width: 960px) {
   .admin-layout {
