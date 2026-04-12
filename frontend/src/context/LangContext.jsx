@@ -168,7 +168,7 @@ export const T = {
 
 // ── Provider ──────────────────────────────────────────────────
 export const LangProvider = ({ children }) => {
-  const [lang, setLang] = useState(() => localStorage.getItem('sakhi_lang') || 'hi');
+  const [lang, setLang] = useState(() => localStorage.getItem('sakhi_lang') || 'en');
 
   const changeLang = (l) => {
     setLang(l);
