@@ -4,30 +4,43 @@ import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
+import { useLang, T } from '../context/LangContext';
+import LangText from '../components/LangText';
 import StarRating from '../components/StarRating';
 
-const CATS = ['All', 'Facial', 'Bridal', 'Mehndi', 'Stitching', 'General'];
+const REVIEW_CATEGORIES = [
+  { key: 'all', label: { hi: 'Sab', en: 'All' }, emoji: '⭐' },
+  { key: 'Facial', label: { hi: 'Facial', en: 'Facial' }, emoji: '💆' },
+  { key: 'Bridal', label: { hi: 'Dulhan', en: 'Bridal' }, emoji: '👰' },
+  { key: 'Mehndi', label: { hi: 'Mehndi', en: 'Mehndi' }, emoji: '🌿' },
+  { key: 'Stitching', label: { hi: 'Silai', en: 'Stitching' }, emoji: '🧵' },
+  { key: 'General', label: { hi: 'General', en: 'General' }, emoji: '💄' },
+];
+
 const catEmoji = { Facial: '💆', Bridal: '👰', Mehndi: '🌿', Stitching: '🧵', General: '💄' };
 
 export default function Reviews() {
   const { user } = useAuth();
-  const [reviews, setReviews]   = useState([]);
-  const [meta, setMeta]         = useState({ avgRating: '0', totalCount: 0 });
-  const [loading, setLoading]   = useState(true);
-  const [filter, setFilter]     = useState('All');
+  const { lang } = useLang();
+  const [reviews, setReviews] = useState([]);
+  const [meta, setMeta] = useState({ avgRating: '0', totalCount: 0 });
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted]   = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     rating: 0, title: '', comment: '', serviceCategory: 'General', customerName: user?.name || '',
   });
+  const translate = (hi, en) => (lang === 'hi' ? hi : en);
+  const ratingWords = lang === 'hi' ? T.ratingWords : T.ratingWordsEn;
 
   useEffect(() => { fetchReviews(); }, [filter]);
 
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      const url = filter === 'All' ? '/reviews' : `/reviews?category=${filter}`;
+      const url = filter === 'all' ? '/reviews' : `/reviews?category=${filter}`;
       const { data } = await API.get(url);
       setReviews(data.reviews);
       setMeta({ avgRating: data.avgRating, totalCount: data.totalCount });
@@ -37,16 +50,16 @@ export default function Reviews() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.rating) { toast.error('Star rating dena zaroori hai ⭐'); return; }
-    if (!form.comment.trim()) { toast.error('Review likhna zaroori hai'); return; }
-    if (!user && !form.customerName.trim()) { toast.error('Aapka naam likhein'); return; }
+    if (!form.rating) { toast.error(translate('Star rating dena zaroori hai ⭐', 'Star rating is required ⭐')); return; }
+    if (!form.comment.trim()) { toast.error(translate('Review likhna zaroori hai', 'Please write a review')); return; }
+    if (!user && !form.customerName.trim()) { toast.error(translate('Aapka naam likhein', 'Enter your name')); return; }
     setSubmitting(true);
     try {
       await API.post('/reviews', form);
       setSubmitted(true);
       setShowForm(false);
       setForm({ rating: 0, title: '', comment: '', serviceCategory: 'General', customerName: user?.name || '' });
-      toast.success('Review submit ho gaya! Admin approval ke baad publish hoga 🙏');
+      toast.success(translate('Review submit ho gaya! Admin approval ke baad publish hoga 🙏', 'Review submitted! It will appear after admin approval 🙏'));
     } catch (err) {
       toast.error(err.response?.data?.message || 'Submit failed');
     }
@@ -66,13 +79,19 @@ export default function Reviews() {
         {/* ── Header ──────────────────────────── */}
         <div style={s.header}>
           <div>
-            <h1 style={s.title}>Customer Reviews ⭐</h1>
-            <p style={s.sub}>Hamare clients ki sacchi raay — unke khaas anubhav</p>
+            <h1 style={s.title}>
+              <LangText hi="Customer Reviews ⭐" en="Customer Reviews ⭐" />
+            </h1>
+            <p style={s.sub}>
+              <LangText hi="Hamare clients ki sacchi raay — unke khaas anubhav" en="Real feedback from our clients — their special experiences" />
+            </p>
           </div>
           {!submitted && (
-            <button onClick={() => user ? setShowForm(f => !f) : (window.location.href = '/login')}
-              className="btn btn-primary">
-              {showForm ? 'Band Karo' : '✍️ Review Likho'}
+            <button onClick={() => user ? setShowForm(f => !f) : (window.location.href = '/login')} className="btn btn-primary">
+              {showForm
+                ? <LangText hi="Band Karo" en="Close" />
+                : <LangText hi="✍️ Review Likho" en="✍️ Write a Review" />
+              }
             </button>
           )}
         </div>
@@ -82,7 +101,9 @@ export default function Reviews() {
           <div style={s.avgBox}>
             <div style={s.avgNum}>{meta.avgRating}</div>
             <StarRating value={Math.round(Number(meta.avgRating))} readOnly size={22} />
-            <div style={s.avgTotal}>{meta.totalCount} reviews</div>
+            <div style={s.avgTotal}>
+              {meta.totalCount} <LangText hi="समीक्षा" en="reviews" />
+            </div>
           </div>
           <div style={s.distBox}>
             {ratingDist.map(d => (
@@ -100,49 +121,88 @@ export default function Reviews() {
         {/* ── Submit Form ──────────────────────── */}
         {showForm && (
           <div style={s.formCard}>
-            <h3 style={s.formTitle}>Apna Review Likho 💕</h3>
+            <h3 style={s.formTitle}>
+              <LangText hi="Apna Review Likho 💕" en="Share Your Review 💕" />
+            </h3>
             <form onSubmit={handleSubmit}>
               {!user && (
                 <div className="form-group">
-                  <label className="form-label">Aapka Naam *</label>
-                  <input className="form-input" value={form.customerName} onChange={e => setForm(f => ({ ...f, customerName: e.target.value }))} placeholder="Apna naam likhein" />
+                  <label className="form-label">
+                    <LangText hi="Aapka Naam *" en="Your Name *" />
+                  </label>
+                  <input
+                    className="form-input"
+                    value={form.customerName}
+                    onChange={e => setForm(f => ({ ...f, customerName: e.target.value }))}
+                    placeholder={translate('Apna naam likhein', 'Type your name')}
+                  />
                 </div>
               )}
               <div className="form-group">
-                <label className="form-label">Rating dein *</label>
+                <label className="form-label">
+                  <LangText hi="Rating dein *" en="Give a Rating *" />
+                </label>
                 <StarRating value={form.rating} onChange={v => setForm(f => ({ ...f, rating: v }))} size={36} />
                 {form.rating > 0 && (
                   <div style={{ marginTop: 6, fontSize: 13, color: 'var(--muted)' }}>
-                    {['', '😞 Bahut bura', '😐 Theek tha', '🙂 Accha laga', '😊 Bahut accha', '🤩 Zabardast!'][form.rating]}
+                    {ratingWords[form.rating] || ''}
                   </div>
                 )}
               </div>
               <div className="form-group">
-                <label className="form-label">Service Category</label>
+                <label className="form-label">
+                  <LangText hi="Service Category" en="Service Category" />
+                </label>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  {CATS.slice(1).map(c => (
-                    <button key={c} type="button"
-                      onClick={() => setForm(f => ({ ...f, serviceCategory: c }))}
-                      style={{ ...s.catChip, ...(form.serviceCategory === c ? s.catChipActive : {}) }}>
-                      {catEmoji[c]} {c}
+                  {REVIEW_CATEGORIES.filter(catOpt => catOpt.key !== 'all').map(catOpt => (
+                    <button
+                      key={catOpt.key}
+                      type="button"
+                      onClick={() => setForm(f => ({ ...f, serviceCategory: catOpt.key }))}
+                      style={{ ...s.catChip, ...(form.serviceCategory === catOpt.key ? s.catChipActive : {}) }}
+                    >
+                      <span style={{ marginRight: 4 }}>{catEmoji[catOpt.key]}</span>
+                      <LangText hi={catOpt.label.hi} en={catOpt.label.en} />
                     </button>
                   ))}
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label">Review Title (optional)</label>
-                <input className="form-input" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="Ek line mein bataiye..." maxLength={80} />
+                <label className="form-label">
+                  <LangText hi="Review Title (optional)" en="Review Title (optional)" />
+                </label>
+                <input
+                  className="form-input"
+                  value={form.title}
+                  onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                  placeholder={translate('Ek line mein bataiye...', 'Summarize in one line...')}
+                  maxLength={80}
+                />
               </div>
               <div className="form-group">
-                <label className="form-label">Aapka Anubhav *</label>
-                <textarea className="form-input" value={form.comment} onChange={e => setForm(f => ({ ...f, comment: e.target.value }))} rows={4} placeholder="Apna experience share karein — kya pasand aaya, kya nahi..." maxLength={500} />
+                <label className="form-label">
+                  <LangText hi="Aapka Anubhav *" en="Your Experience *" />
+                </label>
+                <textarea
+                  className="form-input"
+                  value={form.comment}
+                  onChange={e => setForm(f => ({ ...f, comment: e.target.value }))}
+                  rows={4}
+                  placeholder={translate('Apna experience share karein — kya pasand aaya, kya nahi...', 'Share what you loved — or didn’t — about the service')}
+                  maxLength={500}
+                />
                 <div style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'right', marginTop: 4 }}>{form.comment.length}/500</div>
               </div>
               <div style={s.formNotice}>
-                ℹ️ Aapka review admin approval ke baad publish hoga. Shukriya aapke feedback ke liye! 🙏
+                <LangText
+                  hi="ℹ️ Aapka review admin approval ke baad publish hoga. Shukriya aapke feedback ke liye! 🙏"
+                  en="ℹ️ Your review will appear after admin approval. Thank you for the feedback! 🙏"
+                />
               </div>
               <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: 14 }} disabled={submitting}>
-                {submitting ? 'Submit ho raha hai...' : 'Review Submit Karo →'}
+                {submitting
+                  ? translate('Submit ho raha hai...', 'Submitting...')
+                  : translate('Review Submit Karo →', 'Submit Review →')}
               </button>
             </form>
           </div>
@@ -152,16 +212,28 @@ export default function Reviews() {
         {submitted && (
           <div style={s.successBox}>
             <div style={{ fontSize: 36, marginBottom: 10 }}>🎉</div>
-            <h3 style={{ fontFamily: "'Playfair Display', serif" }}>Bahut Shukriya!</h3>
-            <p style={{ color: 'var(--muted)', marginTop: 6 }}>Aapka review hamein mila. Admin review karke jald publish karengi.</p>
+            <h3 style={{ fontFamily: "'Playfair Display', serif" }}>
+              <LangText hi="Bahut Shukriya!" en="Thank You!" />
+            </h3>
+            <p style={{ color: 'var(--muted)', marginTop: 6 }}>
+              <LangText
+                hi="Aapka review hamein mila. Admin review karke jald publish karengi."
+                en="We have received your review. Admin will publish it soon."
+              />
+            </p>
           </div>
         )}
 
         {/* ── Filter Chips ─────────────────────── */}
         <div style={s.filterRow}>
-          {CATS.map(c => (
-            <button key={c} onClick={() => setFilter(c)} style={{ ...s.chip, ...(filter === c ? s.chipActive : {}) }}>
-              {catEmoji[c] && <span>{catEmoji[c]} </span>}{c}
+          {REVIEW_CATEGORIES.map(catOpt => (
+            <button
+              key={catOpt.key}
+              onClick={() => setFilter(catOpt.key)}
+              style={{ ...s.chip, ...(filter === catOpt.key ? s.chipActive : {}) }}
+            >
+              {catOpt.emoji && <span>{catOpt.emoji} </span>}
+              <LangText hi={catOpt.label.hi} en={catOpt.label.en} />
             </button>
           ))}
         </div>
@@ -170,12 +242,16 @@ export default function Reviews() {
         {loading ? <div className="spinner" /> : reviews.length === 0 ? (
           <div className="empty-state">
             <div className="icon">⭐</div>
-            <h3>Koi review nahi mila</h3>
-            <p>Pehle review dene wale bano!</p>
+            <h3>
+              <LangText hi="Koi review nahi mila" en="No reviews yet" />
+            </h3>
+            <p>
+              <LangText hi="Pehle review dene wale bano!" en="Be the first to leave a review!" />
+            </p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {reviews.map(rv => <ReviewCard key={rv._id} review={rv} />)}
+            {reviews.map(rv => <ReviewCard key={rv._id} review={rv} lang={lang} />)}
           </div>
         )}
       </div>
@@ -183,13 +259,22 @@ export default function Reviews() {
   );
 }
 
-function ReviewCard({ review }) {
+function ReviewCard({ review, lang }) {
   const timeAgo = (date) => {
     const diff = (Date.now() - new Date(date)) / 1000;
-    if (diff < 3600) return `${Math.floor(diff / 60)} minute pehle`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)} ghante pehle`;
-    if (diff < 2592000) return `${Math.floor(diff / 86400)} din pehle`;
-    return new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    if (diff < 3600) {
+      const value = Math.floor(diff / 60);
+      return lang === 'hi' ? `${value} minute pehle` : `${value} minutes ago`;
+    }
+    if (diff < 86400) {
+      const value = Math.floor(diff / 3600);
+      return lang === 'hi' ? `${value} ghante pehle` : `${value} hours ago`;
+    }
+    if (diff < 2592000) {
+      const value = Math.floor(diff / 86400);
+      return lang === 'hi' ? `${value} din pehle` : `${value} days ago`;
+    }
+    return new Date(date).toLocaleDateString(lang === 'hi' ? 'hi-IN' : 'en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
   return (
@@ -205,13 +290,19 @@ function ReviewCard({ review }) {
         </div>
         <div style={s.reviewCatBadge}>
           <span>{catEmoji[review.serviceCategory]}</span>
-          <span style={{ marginLeft: 4 }}>{review.serviceCategory}</span>
+          <span style={{ marginLeft: 4 }}>{getCategoryLabel(review.serviceCategory, lang)}</span>
         </div>
       </div>
       {review.title && <div style={s.reviewTitle}>{review.title}</div>}
       <p style={s.reviewComment}>{review.comment}</p>
     </div>
   );
+}
+
+function getCategoryLabel(key, lang) {
+  const entry = REVIEW_CATEGORIES.find(cat => cat.key === key);
+  if (!entry) return key;
+  return lang === 'hi' ? entry.label.hi : entry.label.en;
 }
 
 const s = {

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useLang } from '../context/LangContext';
+import LangText from '../components/LangText';
 import API from '../api/axios';
 import toast from 'react-hot-toast';
 
@@ -7,6 +9,7 @@ export default function Offers() {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState('');
+  const { t, lang } = useLang();
 
   useEffect(() => {
     API.get('/offers').then(({ data }) => setOffers(data.offers)).catch(() => {}).finally(() => setLoading(false));
@@ -15,20 +18,30 @@ export default function Offers() {
   const copy = (code) => {
     navigator.clipboard?.writeText(code).catch(() => {});
     setCopied(code);
-    toast.success(`${code} copy ho gaya! Booking mein use kariye 🎉`);
+    toast.success(lang === 'hi'
+      ? `${code} copy ho gaya! Booking mein use kariye 🎉`
+      : `${code} copied! Use it while booking 🎉`
+    );
     setTimeout(() => setCopied(''), 3000);
   };
 
   const daysLeft = (till) => {
     const d = Math.ceil((new Date(till) - Date.now()) / (1000 * 60 * 60 * 24));
-    return d > 0 ? `${d} din baaki` : 'Aaj expire';
+    return d > 0 ? `${d} ${t('daysLeft')}` : t('offerExpired');
   };
 
   return (
     <div className="page">
       <div className="container" style={{ maxWidth: 800 }}>
-        <h1 style={s.title}>🎉 Khaas Offers & Chhoot</h1>
-        <p style={s.sub}>Apna favourite offer chuniye aur coupon use kariye booking mein!</p>
+        <h1 style={s.title}>
+          <LangText hi="🎉 Khaas Offers & Chhoot" en="🎉 Special Offers & Savings" />
+        </h1>
+        <p style={s.sub}>
+          <LangText
+            hi="Apna favourite offer chuniye aur coupon use kariye booking mein!"
+            en="Choose your favorite offer and apply the coupon while booking!"
+          />
+        </p>
 
         {loading ? <div className="spinner" /> : offers.length === 0 ? (
           <div className="empty-state"><div className="icon">🎉</div><h3>Abhi koi offer nahi</h3><p>Jald nayi offers aayengi!</p></div>
@@ -36,14 +49,14 @@ export default function Offers() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {offers.map(offer => (
               <div key={offer._id} style={{ ...s.card, borderLeft: `5px solid ${offer.bannerColor}` }}>
-                <div style={s.offerTop}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 36 }}>{offer.emoji}</span>
-                    <div>
-                      <h2 style={s.offerTitle}>{offer.title}</h2>
-                      {offer.occasion && <span style={{ ...s.pill, background: offer.bannerColor + '22', color: offer.bannerColor }}>{offer.occasion}</span>}
-                    </div>
+              <div style={s.offerTop}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ fontSize: 36 }}>{offer.emoji}</span>
+                  <div>
+                    <h2 style={s.offerTitle}>{offer.title}</h2>
+                    {offer.occasion && <span style={{ ...s.pill, background: offer.bannerColor + '22', color: offer.bannerColor }}>{offer.occasion}</span>}
                   </div>
+                </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ ...s.discount, color: offer.bannerColor }}>
                       {offer.discountType === 'percent' ? `${offer.discountValue}% OFF` : `₹${offer.discountValue} OFF`}
@@ -61,13 +74,15 @@ export default function Offers() {
                   <div style={s.couponBox}>
                     <div style={s.couponCode}>{offer.couponCode}</div>
                     <button onClick={() => copy(offer.couponCode)} style={{ ...s.copyBtn, background: copied === offer.couponCode ? '#e8f5e9' : offer.bannerColor, color: copied === offer.couponCode ? '#2e7d32' : '#fff' }}>
-                      {copied === offer.couponCode ? '✓ Copied!' : '📋 Copy Kariye'}
+                      {copied === offer.couponCode ? t('copied') : (
+                        <LangText hi="📋 Copy Kariye" en="📋 Copy Code" />
+                      )}
                     </button>
                   </div>
                 )}
 
                 <Link to="/services" className="btn btn-primary" style={{ marginTop: 12, fontSize: 13, padding: '9px 20px' }}>
-                  Abhi Book Kariye →
+                  <LangText hi="Abhi Book Kariye →" en="Book Now →" />
                 </Link>
               </div>
             ))}
@@ -75,11 +90,20 @@ export default function Offers() {
         )}
 
         <div style={s.infoBox}>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", marginBottom: 10 }}>Coupon Kaise Use Karein?</h3>
-          {['Services chuniye aur Cart mein jodiye', 'Booking page par "Coupon" daalo', 'Coupon code copy karke paste kariye', 'Discount turant apply ho jaayega!'].map((step, i) => (
+          <h3 style={{ fontFamily: "'Playfair Display',serif", marginBottom: 10 }}>
+            <LangText hi="Coupon Kaise Use Karein?" en="How to use the coupon?" />
+          </h3>
+          {[
+            { hi: 'Services chuniye aur Cart mein jodiye', en: 'Choose services and add them to your cart' },
+            { hi: 'Booking page par "Coupon" daalo', en: 'Enter the coupon on the booking page' },
+            { hi: 'Coupon code copy karke paste kariye', en: 'Copy the coupon code and paste it' },
+            { hi: 'Discount turant apply ho jaayega!', en: 'The discount will apply instantly!' },
+          ].map((step, i) => (
             <div key={i} style={{ display: 'flex', gap: 10, marginBottom: 8, alignItems: 'center' }}>
               <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#e8637a', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>{i + 1}</div>
-              <span style={{ fontSize: 14, color: '#7a5560' }}>{step}</span>
+              <span style={{ fontSize: 14, color: '#7a5560' }}>
+                <LangText hi={step.hi} en={step.en} />
+              </span>
             </div>
           ))}
         </div>

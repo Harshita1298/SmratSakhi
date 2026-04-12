@@ -139,6 +139,7 @@ export const T = {
   copyCode:    { hi: '📋 Copy Kariye', en: '📋 Copy Code' },
   copied:      { hi: '✓ Copy Ho Gaya!', en: '✓ Copied!' },
   daysLeft:    { hi: 'din baaki', en: 'days left' },
+  offerExpired: { hi: 'Aaj expire', en: 'Expires today' },
   howToUse:    { hi: 'Coupon Kaise Use Karein?', en: 'How to Use Coupon?' },
   minBooking:  { hi: 'Minimum booking:', en: 'Minimum booking:' },
 
