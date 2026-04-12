@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import API from '../../api/axios';
 import toast from 'react-hot-toast';
+import LangText from '../../components/LangText';
+import AdminLayout from '../../layouts/AdminLayout';
 
 export default function AdminEnquiries() {
   const [enquiries, setEnquiries] = useState([]);
@@ -27,7 +29,10 @@ export default function AdminEnquiries() {
   const TABS = [{ id:'new', l:'🆕 Nayi', c:'new' }, { id:'replied', l:'✅ Answered', c:'replied' }, { id:'all', l:'Sab', c:'all' }];
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Enquiries" en="Enquiries" />}
+      subtitle={<LangText hi="Graahaakon ke sawaalon ka jawab dijiye" en="Answer customer enquiries" />}
+    >
       <div className="container" style={{ maxWidth: 900 }}>
         <h1 style={{ fontSize:28, fontFamily:"'Playfair Display',serif", marginBottom:20 }}>📩 Enquiries</h1>
         <div style={{ display:'flex', gap:8, marginBottom:16 }}>
@@ -67,6 +72,6 @@ export default function AdminEnquiries() {
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

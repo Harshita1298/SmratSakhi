@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import API from '../../api/axios';
 import toast from 'react-hot-toast';
+import LangText from '../../components/LangText';
+import AdminLayout from '../../layouts/AdminLayout';
 
 const EMPTY = { title:'', description:'', discountType:'percent', discountValue:'', couponCode:'', minAmount:'0', maxDiscount:'', validFrom:'', validTill:'', occasion:'', emoji:'🎉', bannerColor:'#e8637a', isActive:true };
 
@@ -43,7 +45,11 @@ export default function AdminOffers() {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Offers" en="Offers" />}
+      subtitle={<LangText hi="Chhoot aur coupon manage kijiye" en="Manage offers and discounts" />}
+      actions={[{ to:'/admin/add-booking', label:<LangText hi="+ Booking Jodiye" en="+ Add Booking" />, variant:'primary', style:{ fontSize:13 } }]}
+    >
       <div className="container" style={{ maxWidth: 900 }}>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
           <h1 style={{ fontSize:28, fontFamily:"'Playfair Display',serif" }}>🎉 Offers Manage Kariye</h1>
@@ -102,6 +108,6 @@ export default function AdminOffers() {
           ))}
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }

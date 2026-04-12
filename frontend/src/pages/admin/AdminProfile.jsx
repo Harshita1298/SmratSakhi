@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useLang } from '../../context/LangContext';
+import LangText from '../../components/LangText';
 import API from '../../api/axios';
 import toast from 'react-hot-toast';
+import AdminLayout from '../../layouts/AdminLayout';
 
 export default function AdminProfile() {
   const { user, updateUser } = useAuth();
@@ -67,7 +69,10 @@ export default function AdminProfile() {
   ];
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Profile" en="Profile" />}
+      subtitle={<LangText hi="Smart Sakhi ki details aur stats" en="Your details and stats" />}
+    >
       <div className="container" style={{ maxWidth: 900 }}>
 
         {/* ── Profile Header ─────────────────────────── */}
@@ -266,7 +271,7 @@ export default function AdminProfile() {
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }
 

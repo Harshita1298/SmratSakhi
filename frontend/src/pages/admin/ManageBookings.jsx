@@ -1,8 +1,9 @@
 // src/pages/admin/ManageBookings.jsx
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import API from '../../api/axios';
 import toast from 'react-hot-toast';
+import LangText from '../../components/LangText';
+import AdminLayout from '../../layouts/AdminLayout';
 
 const statuses = ['all', 'pending', 'confirmed', 'in-progress', 'completed', 'cancelled'];
 const statusColor = { pending: '#f57c00', confirmed: '#2e7d32', 'in-progress': '#6a1b9a', completed: '#1565c0', cancelled: '#c62828' };
@@ -44,12 +45,15 @@ export default function ManageBookings() {
   };
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Bookings" en="Bookings" />}
+      subtitle={<LangText hi="Diary mein sari bookings dekhiye" en="View all diary bookings" />}
+      actions={[{ to:'/admin/add-booking', label:<LangText hi="+ Booking Jodiye" en="+ Add Booking" />, variant:'primary', style:{ fontSize:13 } }]}
+    >
       <div className="container" style={{ maxWidth: 1200 }}>
         {/* Header */}
         <div style={styles.header}>
           <h1 style={styles.title}>📋 All Bookings</h1>
-          <Link to="/admin/add-booking" className="btn btn-primary">+ Add Booking</Link>
         </div>
 
         {/* Filters */}
@@ -147,7 +151,7 @@ export default function ManageBookings() {
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }
 

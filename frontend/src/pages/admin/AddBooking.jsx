@@ -1,8 +1,10 @@
 // src/pages/admin/AddBooking.jsx — Digital Diary Entry
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LangText from '../../components/LangText';
 import API from '../../api/axios';
 import toast from 'react-hot-toast';
+import AdminLayout from '../../layouts/AdminLayout';
 
 const timeSlots = ['9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM','7:00 PM'];
 
@@ -74,7 +76,10 @@ export default function AddBooking() {
   }, {});
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Booking Jodiye" en="Add Booking" />}
+      subtitle={<LangText hi="Diary mein naya entry jodiye" en="Add a diary entry" />}
+    >
       <div className="container" style={{ maxWidth: 900 }}>
         {/* Header */}
         <div style={styles.header}>
@@ -231,7 +236,7 @@ export default function AddBooking() {
           </div>
         </form>
       </div>
-    </div>
+    </AdminLayout>
   );
 }
 

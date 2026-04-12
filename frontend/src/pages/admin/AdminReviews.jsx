@@ -2,7 +2,9 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import API from '../../api/axios';
+import LangText from '../../components/LangText';
 import StarRating from '../../components/StarRating';
+import AdminLayout from '../../layouts/AdminLayout';
 
 const TABS = ['all', 'pending', 'approved', 'rejected'];
 
@@ -63,7 +65,10 @@ export default function AdminReviews() {
   };
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Reviews" en="Reviews" />}
+      subtitle={<LangText hi="Graahaakon ki reviews dekhiye aur approve kariye" en="Manage customer reviews" />}
+    >
       <div className="container" style={{ maxWidth: 1000 }}>
         <h1 style={s.title}>Reviews Management ⭐</h1>
 
@@ -165,7 +170,7 @@ export default function AdminReviews() {
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }
 

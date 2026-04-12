@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import API from '../../api/axios';
 import toast from 'react-hot-toast';
+import LangText from '../../components/LangText';
+import AdminLayout from '../../layouts/AdminLayout';
 
 const CATS = ['Facial','Bridal','Mehndi','Silai','Hair Cutting','General'];
 const EMPTY = { title:'', description:'', imageUrl:'', videoUrl:'', type:'photo', beforeImage:'', afterImage:'', category:'Bridal', instagramUrl:'', youtubeUrl:'', isPublished:true };
@@ -45,7 +47,11 @@ export default function AdminGallery() {
   const catColors = { Facial:'#e8637a', Bridal:'#c9973a', Mehndi:'#2e7d32', Silai:'#7b1fa2', 'Hair Cutting':'#1565c0', General:'#616161' };
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Gallery" en="Gallery" />}
+      subtitle={<LangText hi="Posts aur reels manage kijiye" en="Manage posts and reels" />}
+      actions={[{ to:'/admin/add-booking', label:<LangText hi="+ Booking Jodiye" en="+ Add Booking" />, variant:'primary', style:{ fontSize:13 } }]}
+    >
       <div className="container" style={{ maxWidth: 1100 }}>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
           <h1 style={{ fontSize:28, fontFamily:"'Playfair Display',serif" }}>📸 Gallery Manage Kariye</h1>
@@ -106,6 +112,6 @@ export default function AdminGallery() {
           ))}
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }

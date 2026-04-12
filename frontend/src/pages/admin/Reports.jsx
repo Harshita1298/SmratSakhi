@@ -1,6 +1,8 @@
 // src/pages/admin/Reports.jsx
 import { useState, useEffect } from 'react';
 import API from '../../api/axios';
+import LangText from '../../components/LangText';
+import AdminLayout from '../../layouts/AdminLayout';
 
 const categoryEmoji = { Facial: '💆', Bridal: '👰', Mehndi: '🌿', Stitching: '🧵' };
 const categoryColor = { Facial: '#e8637a', Bridal: '#c9973a', Mehndi: '#4caf50', Stitching: '#9c27b0' };
@@ -26,7 +28,10 @@ export default function Reports() {
   const maxEarning = Math.max(...data.dailyEarnings.map(d => d.earnings), 1);
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Reports" en="Reports" />}
+      subtitle={<LangText hi="Daily earnings aur category insights" en="Daily earnings and category insights" />}
+    >
       <div className="container" style={{ maxWidth: 1100 }}>
         <h1 style={styles.title}>📊 Reports & Analytics</h1>
 
@@ -147,7 +152,7 @@ export default function Reports() {
           </>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }
 

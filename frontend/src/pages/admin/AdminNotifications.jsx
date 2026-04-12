@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import API from '../../api/axios';
 import toast from 'react-hot-toast';
+import LangText from '../../components/LangText';
+import AdminLayout from '../../layouts/AdminLayout';
 
 const EMPTY = { title:'', message:'', emoji:'💄', type:'general', targetAll:true, link:'' };
 
@@ -28,7 +30,10 @@ export default function AdminNotifications() {
   const typeEmojis = { offer:'🎉', booking:'📅', gallery:'📸', general:'💄', festival:'🪔' };
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Notifications" en="Notifications" />}
+      subtitle={<LangText hi="Users ko latest updates bhejiye" en="Send latest updates to users" />}
+    >
       <div className="container" style={{ maxWidth: 800 }}>
         <h1 style={{ fontSize:28, fontFamily:"'Playfair Display',serif", marginBottom:20 }}>🔔 Notifications Bhejiye</h1>
 
@@ -75,6 +80,6 @@ export default function AdminNotifications() {
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }

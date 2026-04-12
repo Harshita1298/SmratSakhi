@@ -1,29 +1,16 @@
-// src/pages/admin/Dashboard.jsx — Reviews, Offers, Posts sab dikhengi yahan
+﻿// src/pages/admin/Dashboard.jsx — Reviews, Offers, Posts sab dikhengi yahan
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import LangText from '../../components/LangText';
 import { useLang } from '../../context/LangContext';
 import API from '../../api/axios';
+import AdminLayout from '../../layouts/AdminLayout';
 
 const SC = { pending:'#f57c00', confirmed:'#2e7d32', 'in-progress':'#7b1fa2', completed:'#1565c0', cancelled:'#c62828' };
 const SB = { pending:'#fff8e1', confirmed:'#e8f5e9', 'in-progress':'#f3e5f5', completed:'#e3f2fd', cancelled:'#fce4ec' };
 
-const adminNavItems = [
-  { to: '/admin', icon: '📊', labelHi: 'Dashboard', labelEn: 'Dashboard' },
-  { to: '/admin/add-booking', icon: '📝', labelHi: 'Booking', labelEn: 'Booking' },
-  { to: '/admin/bookings', icon: '📋', labelHi: 'Bookings', labelEn: 'Bookings' },
-  { to: '/admin/gallery', icon: '📸', labelHi: 'Posts', labelEn: 'Posts' },
-  { to: '/admin/offers', icon: '🎉', labelHi: 'Offers', labelEn: 'Offers' },
-  { to: '/admin/reviews', icon: '⭐', labelHi: 'Reviews', labelEn: 'Reviews' },
-  { to: '/admin/enquiries', icon: '📩', labelHi: 'Enquiries', labelEn: 'Enquiries' },
-  { to: '/admin/notifications', icon: '🔔', labelHi: 'Notify', labelEn: 'Notify' },
-  { to: '/admin/services', icon: '💄', labelHi: 'Services', labelEn: 'Services' },
-  { to: '/admin/reports', icon: '📈', labelHi: 'Reports', labelEn: 'Reports' },
-];
-
 export default function Dashboard() {
-  const { lang, changeLang } = useLang();
-  const location = useLocation();
+  const { lang } = useLang();
   const [stats, setStats]   = useState(null);
   const [books, setBooks]   = useState([]);
   const [revs, setRevs]     = useState([]);
@@ -56,81 +43,29 @@ export default function Dashboard() {
 
   const statCards = stats ? [
     { l:hi("Aaj ki Bookings","Today's Bookings"), v:stats.todayBookings, i:'📅', c:'#e8637a' },
-    { l:hi("Aaj ki Kamaai","Today's Revenue"),   v:`₹${stats.todayRevenue||0}`, i:'💰', c:'#c9973a' },
+    { l:hi("Aaj ki Kamaai","Today's Revenue"),   v:₹, i:'💰', c:'#c9973a' },
     { l:hi("Kul Bookings","Total Bookings"),      v:stats.totalBookings,  i:'📋', c:'#7b1fa2' },
-    { l:hi("Kul Kamaai","Total Revenue"),         v:`₹${(stats.totalRevenue||0).toLocaleString('en-IN')}`, i:'💵', c:'#2e7d32' },
+    { l:hi("Kul Kamaai","Total Revenue"),         v:₹, i:'💵', c:'#2e7d32' },
     { l:hi("Graahaak","Customers"),               v:stats.totalUsers,     i:'👥', c:'#1565c0' },
     { l:hi("Services","Services"),                v:stats.totalServices,  i:'💄', c:'#e65100' },
   ] : [];
 
   const approve = async (id) => {
-    await API.put(`/reviews/admin/${id}/approve`);
+    await API.put(/reviews/admin//approve);
     setRevs(p=>p.filter(x=>x._id!==id));
   };
   const reject = async (id) => {
-    await API.put(`/reviews/admin/${id}/reject`,{adminNote:''});
+    await API.put(/reviews/admin//reject,{adminNote:''});
     setRevs(p=>p.filter(x=>x._id!==id));
   };
 
-  const isActive = (path) => location.pathname === path;
-
   return (
-    <div className="page">
-      <div className="admin-layout">
-        <aside className="admin-sidebar">
-          <div className="admin-sidebar__header">
-            <div style={sx.sidebarTitle}>Smart Sakhi</div>
-            <p style={sx.sidebarSubtitle}>{lang === 'hi' ? 'Admin Panel' : 'Admin Panel'}</p>
-          </div>
-          <div className="admin-sidebar__nav">
-            {adminNavItems.map(nav => (
-              <Link
-                key={nav.to}
-                to={nav.to}
-                className={`admin-sidebar__link ${isActive(nav.to) ? 'active' : ''}`}
-              >
-                <span style={{ marginRight: 6 }}>{nav.icon}</span>
-                <LangText hi={nav.labelHi} en={nav.labelEn} />
-              </Link>
-            ))}
-          </div>
-        </aside>
-        <div className="admin-layout__content">
-          <div className="container" style={{maxWidth:1200}}>
-            <div className="admin-header">
-              <div>
-                <p className="admin-header__brand">Sakhi Beauty Parlour</p>
-                <h1 style={{fontSize:26,fontFamily:"'Playfair Display',serif"}}>{hi('Dashboard 👋','Dashboard 👋')}</h1>
-                <p style={{fontSize:13,color:'#7a5560'}}>{hi('Namaste Smart Sakhi! Aaj ka poora overview.','Welcome Smart Sakhi! Here is today\'s complete overview.')}</p>
-              </div>
-              <div className="admin-header-actions">
-                <div className="lang-switcher">
-                  <span className="lang-switcher__label"><LangText hi="भाषा" en="Language" /></span>
-                  {[
-                    { value: 'en', label: <LangText hi="अंग्रेज़ी" en="English" /> },
-                    { value: 'hi', label: <LangText hi="हिंदी" en="Hindi" /> },
-                  ].map(opt=>(
-                    <button
-                      key={opt.value}
-                      type="button"
-                      className={`lang-switcher__btn ${lang===opt.value?'active':''}`}
-                      onClick={()=>opt.value!==lang && changeLang(opt.value)}
-                      aria-pressed={lang===opt.value}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                <Link to="/profile" className="btn btn-outline btn-sm">
-                  <LangText hi="उपयोगकर्ता खाते" en="User Account" />
-                </Link>
-                <Link to="/admin" className="btn btn-outline btn-sm">
-                  <LangText hi="डैशबोर्ड" en="Dashboard" />
-                </Link>
-                <Link to="/admin/add-booking" className="btn btn-primary" style={{fontSize:13}}>+ {hi('Booking Jodiye','Add Booking')}</Link>
-              </div>
-            </div>
-
+    <AdminLayout
+      title={hi('Dashboard 👋','Dashboard 👋')}
+      subtitle={hi('Namaste Smart Sakhi! Aaj ka poora overview.','Welcome Smart Sakhi! Here is today\'s complete overview.')}
+      actions={[{ to:'/admin/add-booking', label: <>+ {hi('Booking Jodiye','Add Booking')}</>, variant:'primary', style:{ fontSize:13 } }]}
+    >
+      <div className="container" style={{maxWidth:1200}}>
         {/* Stats */}
         <div style={{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:10,marginBottom:14}}>
           {statCards.map(sc=>(
@@ -174,7 +109,7 @@ export default function Dashboard() {
                   <div style={{flex:1,minWidth:0}}>
                     <div style={sx.nm}>{b.customerName}</div>
                     <div style={sx.mt} className="text-ellipsis">{b.services.map(sv=>sv.name).join(', ')}</div>
-                    <div style={sx.mt}>📅 {new Date(b.date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}{b.timeSlot?` • ${b.timeSlot}`:''}</div>
+                    <div style={sx.mt}>📅 {new Date(b.date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}{b.timeSlot? • :''}</div>
                   </div>
                   <div style={{textAlign:'right',flexShrink:0}}>
                     <div style={{fontSize:13,fontWeight:700,color:'#e8637a'}}>₹{b.totalAmount}</div>
@@ -236,11 +171,11 @@ export default function Dashboard() {
                   <Link to="/admin/offers" className="btn btn-primary btn-sm" style={{fontSize:12}}>+ {hi('Nayi Offer','Create Offer')}</Link>
                 </div>
               ):offers.map(o=>(
-                <div key={o._id} style={{...sx.row,paddingLeft:8,borderLeft:`3px solid ${o.bannerColor}`}}>
+                <div key={o._id} style={{...sx.row,paddingLeft:8,borderLeft:3px solid }}>
                   <span style={{fontSize:20,flexShrink:0}}>{o.emoji}</span>
                   <div style={{flex:1,minWidth:0}}>
                     <div style={sx.nm}>{o.title}</div>
-                    <div style={sx.mt}>{o.couponCode&&<span style={{fontFamily:'monospace',fontWeight:700,color:o.bannerColor}}>{o.couponCode}</span>} • {o.discountType==='percent'?`${o.discountValue}% off`:`₹${o.discountValue} off`}</div>
+                    <div style={sx.mt}>{o.couponCode&&<span style={{fontFamily:'monospace',fontWeight:700,color:o.bannerColor}}>{o.couponCode}</span>} • {o.discountType==='percent'?${o.discountValue}% off:₹ off}</div>
                     <div style={{fontSize:10,color:'#2e7d32',fontWeight:600}}>✅ Active</div>
                   </div>
                 </div>
@@ -295,9 +230,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+    </AdminLayout>
   );
 }
 
@@ -311,6 +244,4 @@ const sx = {
   av:   { width:32, height:32, borderRadius:'50%', background:'#e8637a', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:13, flexShrink:0 },
   nm:   { fontSize:12, fontWeight:700, color:'#1a0a0f' },
   mt:   { fontSize:10, color:'#7a5560', marginTop:1 },
-  sidebarTitle: { fontSize:18, fontWeight:700, color:'#1a0a0f' },
-  sidebarSubtitle: { fontSize:11, color:'#7a5560', marginTop:2 },
 };

@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import API from '../../api/axios';
 import toast from 'react-hot-toast';
+import LangText from '../../components/LangText';
+import AdminLayout from '../../layouts/AdminLayout';
 
 const categories = ['Facial', 'Bridal', 'Mehndi', 'Stitching'];
 const categoryEmoji = { Facial: '💆', Bridal: '👰', Mehndi: '🌿', Stitching: '🧵' };
@@ -79,7 +81,11 @@ export default function ManageServices() {
   const filtered = filterCat === 'All' ? services : services.filter(s => s.category === filterCat);
 
   return (
-    <div className="page">
+    <AdminLayout
+      title={<LangText hi="Services" en="Services" />}
+      subtitle={<LangText hi="Mukammal services list aur updates" en="Full list of services & updates" />}
+      actions={[{ to:'/admin/add-booking', label:<LangText hi="+ Booking Jodiye" en="+ Add Booking" />, variant:'primary', style:{ fontSize:13 } }]}
+    >
       <div className="container" style={{ maxWidth: 1100 }}>
         <div style={styles.header}>
           <h1 style={styles.title}>💄 Manage Services</h1>
@@ -186,7 +192,7 @@ export default function ManageServices() {
           </div>
         )}
       </div>
-    </div>
+    </AdminLayout>
   );
 }
 
