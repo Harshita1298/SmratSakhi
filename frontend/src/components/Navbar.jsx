@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLang } from '../context/LangContext';
@@ -16,12 +16,24 @@ export default function Navbar() {
 
   if (location.pathname.startsWith('/admin')) return <AdminNav />;
   const active = (p) => location.pathname === p ? 'nav-link active' : 'nav-link';
+  const navLinks = useMemo(() => [
+    { to: '/', label: t('home') },
+    { to: '/services', label: t('services') },
+    { to: '/gallery', label: t('gallery') },
+    { to: '/offers', label: t('offers') },
+    { to: '/reviews', label: t('reviews') },
+    { to: '/enquiry', label: t('enquiry') },
+  ], [t]);
+  const handleNavClick = () => {
+    setMobileOpen(false);
+    setMenuOpen(false);
+  };
+  const loginRedirect = user?.role === 'admin' ? '/admin' : '/';
 
   return (
     <nav style={styles.nav}>
       <div style={styles.container}>
-        {/* Logo */}
-        <Link to="/" style={styles.logo} onClick={() => setMobileOpen(false)}>
+        <Link to="/" style={styles.logo} onClick={handleNavClick}>
           <div style={styles.logoIcon}>💄</div>
           <div>
             <div style={{ fontFamily:"'Playfair Display',serif", fontSize: 15, fontWeight: 700, color: '#1a0a0f', lineHeight: 1.1 }}>Sakhi</div>
@@ -29,19 +41,15 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Links */}
-        <div style={styles.links}>
-          <Link to="/"         className={active('/')}>{t('home')}</Link>
-          <Link to="/services" className={active('/services')}>{t('services')}</Link>
-          <Link to="/gallery"  className={active('/gallery')}>{t('gallery')}</Link>
-          <Link to="/offers"   className={active('/offers')}>{t('offers')}</Link>
-          <Link to="/reviews"  className={active('/reviews')}>{t('reviews')}</Link>
-          <Link to="/enquiry"  className={active('/enquiry')}>{t('enquiry')}</Link>
+        <div style={styles.links} className="nav-links">
+          {navLinks.map((link) => (
+            <Link key={link.to} to={link.to} className={active(link.to)} onClick={handleNavClick}>
+              {link.label}
+            </Link>
+          ))}
         </div>
 
-        {/* Right Actions */}
-        <div style={styles.actions}>
-          {/* Language Toggle */}
+        <div style={styles.actions} className="nav-actions">
           <LangToggle />
 
           {user && <CartIcon />}
@@ -79,11 +87,79 @@ export default function Navbar() {
             </div>
           )}
         </div>
+
+        <button
+          className="mobile-hamburger"
+          type="button"
+          aria-label="Open navigation menu"
+          style={styles.mobileButton}
+          onClick={() => setMobileOpen((prev) => !prev)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
+
+      {mobileOpen && <div style={styles.mobileBackdrop} onClick={handleNavClick} />}
+
+  <div style={{ ...styles.mobileMenu, ...(mobileOpen ? styles.mobileMenuOpen : {}) }}>
+        <div style={styles.mobileMenuHeader}>
+          <strong style={{ fontSize: 16 }}>Sakhi</strong>
+          <button onClick={() => setMobileOpen(false)} style={styles.closeButton} aria-label="Close menu">✕</button>
+        </div>
+        <div style={styles.mobileLinks}>
+          {navLinks.map((link) => (
+            <Link key={link.to} to={link.to} className={active(link.to)} style={{ width: '100%' }} onClick={handleNavClick}>
+              {link.label}
+            </Link>
+          ))}
+        </div>
+        <div style={styles.mobileActions}>
+          <LangToggle />
+          {user && <CartIcon />}
+          {user && (
+            <Link to="/notifications" style={styles.iconBtn}>🔔 {t('notifications')}</Link>
+          )}
+          {user ? (
+            <>
+              <Link to="/profile" style={styles.mobileActionLink}>{t('myProfile')}</Link>
+              <Link to="/my-bookings" style={styles.mobileActionLink}>{t('myBookings')}</Link>
+              <Link to="/wallet" style={styles.mobileActionLink}>{t('myWallet')}</Link>
+              {isAdmin && <Link to="/admin" style={styles.mobileActionLink}>{t('adminPanel')}</Link>}
+              <button onClick={() => { logout(); navigate('/'); }} style={styles.mobileActionLink} type="button">
+                {t('logout')}
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="btn btn-outline btn-sm" onClick={handleNavClick}>{t('login')}</Link>
+              <Link to="/register" className="btn btn-primary btn-sm" onClick={handleNavClick}>{t('register')}</Link>
+            </>
+          )}
+        </div>
       </div>
 
       <style>{`
         .nav-link { color: var(--muted); font-size: 13px; font-weight: 500; padding: 5px 3px; border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
         .nav-link:hover, .nav-link.active { color: var(--rose); border-bottom-color: var(--rose); }
+        .mobile-hamburger span {
+          display: block;
+          width: 20px;
+          height: 2px;
+          background: #c94d65;
+          margin: 3px 0;
+          transition: transform 0.2s;
+        }
+        @media (max-width: 960px) {
+          .nav-links { display: none !important; }
+          .nav-actions { display: none !important; }
+          .mobile-hamburger { display: flex !important; }
+        }
+        @media (min-width: 961px) {
+          .mobile-hamburger { display: none !important; }
+          .mobile-menu, .mobile-backdrop { display: none !important; }
+        }
       `}</style>
     </nav>
   );
@@ -142,6 +218,45 @@ const styles = {
   avatar:   { width: 26, height: 26, borderRadius: '50%', background: '#e8637a', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 },
   dropdown: { position: 'absolute', right: 0, top: 'calc(100% + 8px)', background: '#fff', border: '1px solid #f0dde2', borderRadius: 14, boxShadow: '0 8px 32px rgba(232,99,122,0.15)', minWidth: 200, padding: '8px', zIndex: 200 },
   dropItem: { display: 'block', padding: '9px 12px', borderRadius: 8, fontSize: 13, color: '#3d1f28', textDecoration: 'none' },
+  mobileButton: { display: 'none', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, border: 'none', background: 'transparent', padding: 6, cursor: 'pointer', borderRadius: 12, flexShrink: 0 },
+  mobileBackdrop: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 98 },
+  mobileMenu: {
+    position: 'fixed',
+    top: 'var(--nav-height)',
+    left: 0,
+    right: 0,
+    zIndex: 99,
+    background: '#fff',
+    borderBottom: '1px solid var(--border)',
+    boxShadow: '0 12px 40px rgba(26,10,15,0.1)',
+    transform: 'translateY(-16px)',
+    opacity: 0,
+    pointerEvents: 'none',
+    transition: 'opacity 0.25s ease, transform 0.25s ease',
+  },
+  mobileMenuOpen: {
+    transform: 'translateY(0)',
+    opacity: 1,
+    pointerEvents: 'auto',
+  },
+  mobileMenuHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', borderBottom: '1px solid var(--border)' },
+  closeButton: { border: 'none', background: 'none', cursor: 'pointer', fontSize: 18, lineHeight: 1 },
+  mobileLinks: { display: 'flex', flexDirection: 'column', gap: 12, padding: '16px' },
+  mobileActions: { display: 'flex', flexDirection: 'column', gap: 12, padding: '16px', borderTop: '1px solid var(--border)' },
+  mobileActionLink: {
+    borderRadius: 12,
+    border: '1px solid var(--border)',
+    padding: '10px 12px',
+    textAlign: 'center',
+    color: '#3d1f28',
+    fontWeight: 600,
+    textDecoration: 'none',
+    background: '#fff',
+    width: '100%',
+    cursor: 'pointer',
+    display: 'inline-flex',
+    justifyContent: 'center',
+  },
 };
 
 const aS = {
