@@ -28,6 +28,20 @@ export default function Navbar() {
     setMobileOpen(false);
     setMenuOpen(false);
   };
+  const userLinks = useMemo(() => {
+    const links = [
+      { to: '/profile', label: t('myProfile') },
+      { to: '/my-bookings', label: t('myBookings') },
+      { to: '/wallet', label: t('myWallet') },
+    ];
+    if (isAdmin) links.push({ to: '/admin', label: t('adminPanel') });
+    return links;
+  }, [t, isAdmin]);
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    handleNavClick();
+  };
   const loginRedirect = user?.role === 'admin' ? '/admin' : '/';
 
   return (
@@ -105,36 +119,58 @@ export default function Navbar() {
 
   <div style={{ ...styles.mobileMenu, ...(mobileOpen ? styles.mobileMenuOpen : {}) }}>
         <div style={styles.mobileMenuHeader}>
-          <strong style={{ fontSize: 16 }}>Sakhi</strong>
+          <div>
+            <strong style={{ fontSize: 16 }}>Sakhi</strong>
+            <div style={styles.mobileMenuTagline}>
+              <LangText hi="Menu" en="Menu" />
+            </div>
+          </div>
           <button onClick={() => setMobileOpen(false)} style={styles.closeButton} aria-label="Close menu">✕</button>
         </div>
-        <div style={styles.mobileLinks}>
+
+        <div style={styles.mobileSection}>
+          <div style={styles.mobileSectionTitle}>
+            <LangText hi="Menu" en="Menu" />
+          </div>
           {navLinks.map((link) => (
-            <Link key={link.to} to={link.to} className={active(link.to)} style={{ width: '100%' }} onClick={handleNavClick}>
+            <Link key={link.to} to={link.to} className={active(link.to)} style={styles.mobileLink} onClick={handleNavClick}>
               {link.label}
             </Link>
           ))}
         </div>
-        <div style={styles.mobileActions}>
-          <LangToggle />
-          {user && <CartIcon />}
-          {user && (
-            <Link to="/notifications" style={styles.iconBtn}>🔔 {t('notifications')}</Link>
-          )}
+
+        <div style={styles.mobileSection}>
+          <div style={styles.mobileSectionTitle}>
+            <LangText hi="Account" en="Account" />
+          </div>
+          <div style={styles.mobileAccountRow}>
+            <LangToggle />
+            {user && (
+              <div style={styles.cartWrapper} onClick={handleNavClick}>
+                <CartIcon />
+              </div>
+            )}
+            {user && (
+              <Link to="/notifications" style={styles.mobileIconLink} onClick={handleNavClick}>
+                🔔 {t('notifications')}
+              </Link>
+            )}
+          </div>
           {user ? (
             <>
-              <Link to="/profile" style={styles.mobileActionLink}>{t('myProfile')}</Link>
-              <Link to="/my-bookings" style={styles.mobileActionLink}>{t('myBookings')}</Link>
-              <Link to="/wallet" style={styles.mobileActionLink}>{t('myWallet')}</Link>
-              {isAdmin && <Link to="/admin" style={styles.mobileActionLink}>{t('adminPanel')}</Link>}
-              <button onClick={() => { logout(); navigate('/'); }} style={styles.mobileActionLink} type="button">
+              {userLinks.map(link => (
+                <Link key={link.to} to={link.to} style={styles.mobileUserLink} onClick={handleNavClick}>
+                  {link.label}
+                </Link>
+              ))}
+              <button type="button" onClick={handleLogout} style={styles.mobileLogoutButton}>
                 {t('logout')}
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="btn btn-outline btn-sm" onClick={handleNavClick}>{t('login')}</Link>
-              <Link to="/register" className="btn btn-primary btn-sm" onClick={handleNavClick}>{t('register')}</Link>
+              <Link to="/login" className="btn btn-outline btn-sm" style={styles.mobileUserLink} onClick={handleNavClick}>{t('login')}</Link>
+              <Link to="/register" className="btn btn-primary btn-sm" style={styles.mobileUserLink} onClick={handleNavClick}>{t('register')}</Link>
             </>
           )}
         </div>
@@ -307,10 +343,23 @@ const styles = {
     pointerEvents: 'auto',
   },
   mobileMenuHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', borderBottom: '1px solid var(--border)' },
+  mobileMenuTagline: { fontSize: 12, color: '#7a5560', marginTop: 4 },
   closeButton: { border: 'none', background: 'none', cursor: 'pointer', fontSize: 18, lineHeight: 1 },
-  mobileLinks: { display: 'flex', flexDirection: 'column', gap: 12, padding: '16px' },
-  mobileActions: { display: 'flex', flexDirection: 'column', gap: 12, padding: '16px', borderTop: '1px solid var(--border)' },
-  mobileActionLink: {
+  mobileSection: { padding: '16px', borderBottom: '1px solid var(--border)' },
+  mobileSectionTitle: { fontSize: 11, fontWeight: 600, letterSpacing: 1, color: '#7a5560', marginBottom: 10, textTransform: 'uppercase' },
+  mobileLink: {
+    width: '100%',
+    borderRadius: 14,
+    padding: '12px 16px',
+    border: '1px solid var(--border)',
+    marginBottom: 10,
+    display: 'block',
+    textAlign: 'center',
+  },
+  mobileAccountRow: { display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 12 },
+  mobileIconLink: { color: '#c94d65', fontWeight: 600, textDecoration: 'none', fontSize: 14 },
+  cartWrapper: { display: 'inline-flex' },
+  mobileUserLink: {
     borderRadius: 12,
     border: '1px solid var(--border)',
     padding: '10px 12px',
@@ -323,6 +372,19 @@ const styles = {
     cursor: 'pointer',
     display: 'inline-flex',
     justifyContent: 'center',
+    marginBottom: 8,
+  },
+  mobileLogoutButton: {
+    borderRadius: 12,
+    border: 'none',
+    padding: '10px 12px',
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: 600,
+    background: '#e8637a',
+    width: '100%',
+    cursor: 'pointer',
+    marginTop: 10,
   },
 };
 

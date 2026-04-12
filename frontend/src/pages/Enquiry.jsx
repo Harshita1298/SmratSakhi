@@ -48,7 +48,7 @@ export default function Enquiry() {
             <LangText hi="Bahut Shukriya!" en="Thank you!" />
           </h2>
           <p style={{ color: '#7a5560', marginBottom: 20, lineHeight: 1.7 }}>
-            <LangText hi="Aapki enquiry mil gayi. Ranjana Ji jald hi" en="We received your enquiry. Ranjana Ji will reach out soon at" />
+            <LangText hi="Aapki enquiry mil gayi. Smart Sakhi jald hi" en="We received your enquiry. Smart Sakhi will reach out soon at" />
             {' '}
             <strong>+91 9936657399</strong>
             {' '}

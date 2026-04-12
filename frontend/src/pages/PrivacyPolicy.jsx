@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
         {[
           {
             title: '1. Hamari App Kaun Chalati Hai?',
-            content: `Smart Sakhi App ko Sakhi Beauty Parlour, Jaitpur, Khajni Road, Gorakhpur, Uttar Pradesh chalati hai. Ranjana Ji is app ki owner hain. Kisi bhi sawaal ke liye humse contact karein: +91 9936657399.`
+            content: `Smart Sakhi App ko Sakhi Beauty Parlour, Jaitpur, Khajni Road, Gorakhpur, Uttar Pradesh chalati hai. Smart Sakhi is app ki owner hai. Kisi bhi sawaal ke liye humse contact karein: +91 9936657399.`
           },
           {
             title: '2. Hum Kaun Si Information Lete Hain?',

@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import API from '../api/axios';
+import { useLang } from '../context/LangContext';
+import LangText from '../components/LangText';
 
 const typeConfig = { offer:'🎉', booking:'📅', gallery:'📸', general:'💄', festival:'🪔' };
 
 export default function Notifications() {
   const [notifs, setNotifs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { lang } = useLang();
 
   useEffect(() => {
     API.get('/notifications').then(({ data }) => setNotifs(data.notifications)).catch(() => {}).finally(() => setLoading(false));
@@ -16,13 +19,23 @@ export default function Notifications() {
     setNotifs(prev => prev.map(n => n._id === id ? { ...n, read: true } : n));
   };
 
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString(lang === 'hi' ? 'hi-IN' : 'en-IN', {
+      day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit',
+    });
+  };
+
   return (
     <div className="page">
       <div className="container" style={{ maxWidth: 700 }}>
-        <h1 style={{ fontSize: 32, fontFamily: "'Playfair Display',serif", marginBottom: 8 }}>🔔 Notifications</h1>
-        <p style={{ color: '#7a5560', marginBottom: 24 }}>Sakhi Beauty ke latest updates</p>
+        <h1 style={{ fontSize: 32, fontFamily: "'Playfair Display',serif", marginBottom: 8 }}>
+          <LangText hi="🔔 Notifications" en="🔔 Notifications" />
+        </h1>
+        <p style={{ color: '#7a5560', marginBottom: 24 }}>
+          <LangText hi="Sakhi Beauty ke latest updates" en="Latest updates from Sakhi Beauty" />
+        </p>
         {loading ? <div className="spinner" /> : notifs.length === 0 ? (
-          <div className="empty-state"><div className="icon">🔔</div><h3>Koi notification nahi</h3></div>
+          <div className="empty-state"><div className="icon">🔔</div><h3><LangText hi="Koi notification nahi" en="No notifications yet" /></h3></div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {notifs.map(n => (
@@ -31,11 +44,15 @@ export default function Notifications() {
                   <span style={{ fontSize: 22 }}>{n.emoji || typeConfig[n.type] || '💄'}</span>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: 15 }}>{n.title}</div>
-                    <div style={{ fontSize: 12, color: '#7a5560' }}>{new Date(n.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' })}</div>
+                    <div style={{ fontSize: 12, color: '#7a5560' }}>{formatDate(n.createdAt)}</div>
                   </div>
                 </div>
                 <p style={{ fontSize: 14, color: '#7a5560', lineHeight: 1.6 }}>{n.message}</p>
-                {n.link && <a href={n.link} style={{ fontSize: 13, color: '#e8637a', fontWeight: 600, marginTop: 8, display: 'inline-block' }}>Dekhiye →</a>}
+                {n.link && (
+                  <a href={n.link} style={{ fontSize: 13, color: '#e8637a', fontWeight: 600, marginTop: 8, display: 'inline-block' }}>
+                    <LangText hi="Dekhiye →" en="View →" />
+                  </a>
+                )}
               </div>
             ))}
           </div>

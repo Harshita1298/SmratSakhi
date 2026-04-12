@@ -1,5 +1,5 @@
 // src/pages/admin/AdminProfile.jsx
-// Ranjana Ji ki poori profile — details, photo, social links
+// Smart Sakhi ki poori profile — details, photo, social links
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useLang } from '../../context/LangContext';
@@ -12,7 +12,7 @@ export default function AdminProfile() {
   const [tab, setTab] = useState('profile');
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
-    name:    user?.name    || 'Ranjana Ji',
+    name:    user?.name    || 'Smart Sakhi',
     phone:   user?.phone   || '9936657399',
     email:   user?.email   || 'ranjana@sakhibeauty.in',
     address: user?.address || 'Jaitpur, Khajni Road, Gorakhpur, UP',

@@ -54,14 +54,14 @@ export default function Gallery() {
               <LangText hi="📸 Hamare Kaam Ki Jhalak" en="📸 A Glimpse Of Our Work" />
             </h1>
             <p style={s.sub}>
-              <LangText hi="Ranjana Ji ke haathon ka jadoo — dekho aur inspire ho jaao" en="Ranjana Ji's magic on display — browse and get inspired" />
+              <LangText hi="Smart Sakhi ke haathon ka jadoo — dekho aur inspire ho jaao" en="Smart Sakhi's magic on display — browse and get inspired" />
             </p>
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
-            <a href="https://instagram.com/sakhibeautyparlour" target="_blank" rel="noreferrer" style={s.socialBtn} className="btn">
+            <a href="https://www.instagram.com/sakhi_mekeover28?igsh=MWl2eTE0a3J3bWhvYw==" target="_blank" rel="noreferrer" style={s.socialBtn} className="btn">
               <LangText hi="📷 Instagram" en="📷 Instagram" />
             </a>
-            <a href="https://youtube.com/@sakhibeauty" target="_blank" rel="noreferrer" style={{ ...s.socialBtn, background: '#ff0000' }} className="btn">
+            <a href="#" target="_blank" rel="noreferrer" style={{ ...s.socialBtn, background: '#ff0000' }} className="btn">
               <LangText hi="▶ YouTube" en="▶ YouTube" />
             </a>
           </div>

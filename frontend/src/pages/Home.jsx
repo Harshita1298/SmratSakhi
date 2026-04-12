@@ -184,7 +184,7 @@ export default function Home() {
           </h1>
           <p style={styles.heroSub}>
             <LangText
-              hi="Ranjana Ji ke haathon se premium beauty services — ghar par ya parlour mein. Bridal makeup, Mehndi, facial aur silai, sab ek jagah."
+            hi="Smart Sakhi ke haathon se premium beauty services — ghar par ya parlour mein. Bridal makeup, Mehndi, facial aur silai, sab ek jagah."
               en="Premium beauty services at your doorstep or our parlour. Bridal makeup, Mehndi, Facials & Stitching — all in one place."
             />
           </p>

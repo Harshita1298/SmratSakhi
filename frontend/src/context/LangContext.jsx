@@ -25,7 +25,7 @@ export const T = {
   // Home Page
   heroTitle1:  { hi: 'Sundar Dikhiye,', en: 'Look Beautiful,' },
   heroTitle2:  { hi: 'Khoobsoorat Mahsoos Kariye', en: 'Feel Confident' },
-  heroSub:     { hi: 'Ranjana Ji ke haathon se — Mehndi, Bridal, Facial, Silai, Hair Cutting\nGhar par bhi service milti hai!', en: 'Expert beauty services by Ranjana Ji — Mehndi, Bridal, Facial, Stitching, Hair Cutting\nHome service also available!' },
+  heroSub:     { hi: 'Smart Sakhi ke haathon se — Mehndi, Bridal, Facial, Silai, Hair Cutting\nGhar par bhi service milti hai!', en: 'Expert beauty services by Smart Sakhi — Mehndi, Bridal, Facial, Stitching, Hair Cutting\nHome service also available!' },
   heroBadge:   { hi: "Gorakhpur ki Trusted Beauty Parlour — 20+ Saal", en: "Gorakhpur's Trusted Beauty Parlour — 20+ Years" },
   browseBtn:   { hi: 'Services Dekhiye →', en: 'Browse Services →' },
   aboutBtn:    { hi: 'Hamare Baare Mein', en: 'About Us' },
@@ -41,7 +41,7 @@ export const T = {
   premiumSub:  { hi: 'Behtareen products', en: 'Best products only' },
   starRating:  { hi: '5 Star Rating', en: '5 Star Rating' },
   starSub:     { hi: 'Khush graahaak', en: 'Happy clients' },
-  latestPosts: { hi: 'Ranjana Ji ki Nayi Posts', en: 'Latest from Ranjana Ji' },
+  latestPosts: { hi: 'Smart Sakhi ki Nayi Posts', en: 'Latest from Smart Sakhi' },
   activeOffers:{ hi: 'Aaj ke Khaas Offers 🎉', en: 'Today\'s Special Offers 🎉' },
   bookNow:     { hi: 'Book Kariye →', en: 'Book Now →' },
   viewAll:     { hi: 'Sab Dekhiye →', en: 'View All →' },
@@ -97,7 +97,7 @@ export const T = {
 
   // About
   ourStory:    { hi: '🌸 Hamari Kahani', en: '🌸 Our Story' },
-  aboutRanjana:{ hi: '👩 Ranjana Ji ke Baare Mein', en: '👩 About Ranjana Ji' },
+  aboutRanjana:{ hi: '👩 Smart Sakhi ke Baare Mein', en: '👩 About Smart Sakhi' },
   awards:      { hi: '🏆 Puraskar aur Pramaanpatra', en: '🏆 Awards & Certifications' },
   contact:     { hi: '📞 Sampark Kariye', en: '📞 Contact Us' },
   callNow:     { hi: '📞 Abhi Call Kariye', en: '📞 Call Now' },
@@ -153,7 +153,7 @@ export const T = {
   yourMessage: { hi: 'Aapka Message *', en: 'Your Message *' },
   sendBtn:     { hi: '📩 Enquiry Bhejiye →', en: '📩 Send Enquiry →' },
   enquiryDone: { hi: 'Bahut Shukriya!', en: 'Thank You!' },
-  enquiryDoneSub: { hi: 'Ranjana Ji jald sampark karengi!', en: 'Ranjana Ji will contact you soon!' },
+  enquiryDoneSub: { hi: 'Smart Sakhi jald sampark karegi!', en: 'Smart Sakhi will contact you soon!' },
 
   // General
   loading:     { hi: 'Load ho raha hai...', en: 'Loading...' },

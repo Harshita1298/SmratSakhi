@@ -63,7 +63,7 @@ export default function Dashboard() {
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:20,flexWrap:'wrap',gap:10}}>
           <div>
             <h1 style={{fontSize:26,fontFamily:"'Playfair Display',serif"}}>{hi('Dashboard 👋','Dashboard 👋')}</h1>
-            <p style={{fontSize:13,color:'#7a5560'}}>{hi('Namaste Ranjana Ji! Aaj ka poora overview.','Welcome Ranjana Ji! Here is today\'s complete overview.')}</p>
+            <p style={{fontSize:13,color:'#7a5560'}}>{hi('Namaste Smart Sakhi! Aaj ka poora overview.','Welcome Smart Sakhi! Here is today\'s complete overview.')}</p>
           </div>
           <Link to="/admin/add-booking" className="btn btn-primary" style={{fontSize:13}}>+ {hi('Booking Jodiye','Add Booking')}</Link>
         </div>
