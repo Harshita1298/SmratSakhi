@@ -1,14 +1,29 @@
 // src/pages/admin/Dashboard.jsx — Reviews, Offers, Posts sab dikhengi yahan
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import LangText from '../../components/LangText';
 import { useLang } from '../../context/LangContext';
 import API from '../../api/axios';
 
 const SC = { pending:'#f57c00', confirmed:'#2e7d32', 'in-progress':'#7b1fa2', completed:'#1565c0', cancelled:'#c62828' };
 const SB = { pending:'#fff8e1', confirmed:'#e8f5e9', 'in-progress':'#f3e5f5', completed:'#e3f2fd', cancelled:'#fce4ec' };
 
+const adminNavItems = [
+  { to: '/admin', icon: '📊', labelHi: 'Dashboard', labelEn: 'Dashboard' },
+  { to: '/admin/add-booking', icon: '📝', labelHi: 'Booking', labelEn: 'Booking' },
+  { to: '/admin/bookings', icon: '📋', labelHi: 'Bookings', labelEn: 'Bookings' },
+  { to: '/admin/gallery', icon: '📸', labelHi: 'Posts', labelEn: 'Posts' },
+  { to: '/admin/offers', icon: '🎉', labelHi: 'Offers', labelEn: 'Offers' },
+  { to: '/admin/reviews', icon: '⭐', labelHi: 'Reviews', labelEn: 'Reviews' },
+  { to: '/admin/enquiries', icon: '📩', labelHi: 'Enquiries', labelEn: 'Enquiries' },
+  { to: '/admin/notifications', icon: '🔔', labelHi: 'Notify', labelEn: 'Notify' },
+  { to: '/admin/services', icon: '💄', labelHi: 'Services', labelEn: 'Services' },
+  { to: '/admin/reports', icon: '📈', labelHi: 'Reports', labelEn: 'Reports' },
+];
+
 export default function Dashboard() {
   const { lang } = useLang();
+  const location = useLocation();
   const [stats, setStats]   = useState(null);
   const [books, setBooks]   = useState([]);
   const [revs, setRevs]     = useState([]);
@@ -57,13 +72,35 @@ export default function Dashboard() {
     setRevs(p=>p.filter(x=>x._id!==id));
   };
 
+  const isActive = (path) => location.pathname === path;
+
   return (
     <div className="page">
-      <div className="container" style={{maxWidth:1200}}>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:20,flexWrap:'wrap',gap:10}}>
-          <div>
-            <h1 style={{fontSize:26,fontFamily:"'Playfair Display',serif"}}>{hi('Dashboard 👋','Dashboard 👋')}</h1>
-            <p style={{fontSize:13,color:'#7a5560'}}>{hi('Namaste Smart Sakhi! Aaj ka poora overview.','Welcome Smart Sakhi! Here is today\'s complete overview.')}</p>
+      <div className="admin-layout">
+        <aside className="admin-sidebar">
+          <div className="admin-sidebar__header">
+            <div style={sx.sidebarTitle}>Smart Sakhi</div>
+            <p style={sx.sidebarSubtitle}>{lang === 'hi' ? 'Admin Panel' : 'Admin Panel'}</p>
+          </div>
+          <div className="admin-sidebar__nav">
+            {adminNavItems.map(nav => (
+              <Link
+                key={nav.to}
+                to={nav.to}
+                className={`admin-sidebar__link ${isActive(nav.to) ? 'active' : ''}`}
+              >
+                <span style={{ marginRight: 6 }}>{nav.icon}</span>
+                <LangText hi={nav.labelHi} en={nav.labelEn} />
+              </Link>
+            ))}
+          </div>
+        </aside>
+        <div className="admin-layout__content">
+          <div className="container" style={{maxWidth:1200}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:20,flexWrap:'wrap',gap:10}}>
+              <div>
+                <h1 style={{fontSize:26,fontFamily:"'Playfair Display',serif"}}>{hi('Dashboard 👋','Dashboard 👋')}</h1>
+                <p style={{fontSize:13,color:'#7a5560'}}>{hi('Namaste Smart Sakhi! Aaj ka poora overview.','Welcome Smart Sakhi! Here is today\'s complete overview.')}</p>
           </div>
           <Link to="/admin/add-booking" className="btn btn-primary" style={{fontSize:13}}>+ {hi('Booking Jodiye','Add Booking')}</Link>
         </div>
@@ -230,8 +267,71 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+          </div>
         </div>
       </div>
+      <style>{`
+        .admin-layout {
+          display: flex;
+          gap: 22px;
+          align-items: flex-start;
+        }
+        .admin-layout__content {
+          flex: 1;
+        }
+        .admin-sidebar {
+          width: 240px;
+          background: #fff;
+          border: 1px solid #f0dde2;
+          border-radius: 18px;
+          padding: 18px;
+          box-shadow: 0 10px 30px rgba(26,10,15,0.04);
+          position: sticky;
+          top: calc(var(--nav-height, 68px) + 16px);
+          height: fit-content;
+        }
+        .admin-sidebar__header {
+          margin-bottom: 12px;
+        }
+        .admin-sidebar__link {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 10px 14px;
+          border-radius: 12px;
+          margin-bottom: 6px;
+          color: #7a5560;
+          font-weight: 600;
+          text-decoration: none;
+          transition: background 0.2s, color 0.2s;
+        }
+        .admin-sidebar__link.active {
+          background: #fce8ec;
+          color: #c94d65;
+          border-left: 4px solid #e8637a;
+        }
+        .admin-sidebar__link:hover {
+          background: #faf3f5;
+          color: #c94d65;
+        }
+        .admin-layout__nav-title {
+          font-size: 12px;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          color: #7a5560;
+          font-weight: 600;
+          margin-bottom: 10px;
+        }
+        @media (max-width: 960px) {
+          .admin-layout {
+            flex-direction: column;
+          }
+          .admin-sidebar {
+            width: 100%;
+            position: static;
+          }
+        }
+      `}</style>
     </div>
   );
 }
