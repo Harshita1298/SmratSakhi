@@ -253,9 +253,9 @@ export default function Dashboard() {
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:7}}>
                 {[
                   {to:'/admin/add-booking',  i:'📝',l:hi('Booking','Booking')},
-                  {to:'/admin/gallery',       i:'📸',l:hi('Post',   'Post')},
-                  {to:'/admin/offers',        i:'🎉',l:hi('Offer',  'Offer')},
-                  {to:'/admin/notifications', i:'🔔',l:hi('Notify', 'Notify')},
+                  {to:'/admin/gallery',       i:'📸',l:hi('Post','Post')},
+                  {to:'/admin/offers',        i:'🎉',l:hi('Offer','Offer')},
+                  {to:'/admin/notifications', i:'🔔',l:hi('Notify','Notify')},
                   {to:'/admin/services',      i:'💄',l:hi('Service','Service')},
                   {to:'/admin/profile',       i:'👤',l:hi('Profile','Profile')},
                 ].map(q=>(
@@ -267,72 +267,11 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          </div>
         </div>
       </div>
-      <style>{`
-        .admin-layout {
-          display: flex;
-          gap: 22px;
-          align-items: flex-start;
-        }
-        .admin-layout__content {
-          flex: 1;
-        }
-        .admin-sidebar {
-          width: 240px;
-          background: #fff;
-          border: 1px solid #f0dde2;
-          border-radius: 18px;
-          padding: 18px;
-          box-shadow: 0 10px 30px rgba(26,10,15,0.04);
-          position: sticky;
-          top: calc(var(--nav-height, 68px) + 16px);
-          height: fit-content;
-        }
-        .admin-sidebar__header {
-          margin-bottom: 12px;
-        }
-        .admin-sidebar__link {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          padding: 10px 14px;
-          border-radius: 12px;
-          margin-bottom: 6px;
-          color: #7a5560;
-          font-weight: 600;
-          text-decoration: none;
-          transition: background 0.2s, color 0.2s;
-        }
-        .admin-sidebar__link.active {
-          background: #fce8ec;
-          color: #c94d65;
-          border-left: 4px solid #e8637a;
-        }
-        .admin-sidebar__link:hover {
-          background: #faf3f5;
-          color: #c94d65;
-        }
-        .admin-layout__nav-title {
-          font-size: 12px;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          color: #7a5560;
-          font-weight: 600;
-          margin-bottom: 10px;
-        }
-        @media (max-width: 960px) {
-          .admin-layout {
-            flex-direction: column;
-          }
-          .admin-sidebar {
-            width: 100%;
-            position: static;
-          }
-        }
-      `}</style>
     </div>
+  </div>
+</div>
   );
 }
 
@@ -346,4 +285,6 @@ const sx = {
   av:   { width:32, height:32, borderRadius:'50%', background:'#e8637a', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700, fontSize:13, flexShrink:0 },
   nm:   { fontSize:12, fontWeight:700, color:'#1a0a0f' },
   mt:   { fontSize:10, color:'#7a5560', marginTop:1 },
+  sidebarTitle: { fontSize:18, fontWeight:700, color:'#1a0a0f' },
+  sidebarSubtitle: { fontSize:11, color:'#7a5560', marginTop:2 },
 };
