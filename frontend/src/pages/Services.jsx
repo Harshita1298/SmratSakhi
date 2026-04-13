@@ -12,7 +12,7 @@ const FILTERS = [
   { key: 'Bridal', emoji: '👰', label: { en: 'Bridal', hi: 'Dulhan' } },
   { key: 'Mehndi', emoji: '🌿', label: { en: 'Mehndi', hi: 'Mehndi' } },
   { key: 'Hair Cutting', emoji: '✂️', label: { en: 'Hair Cutting', hi: 'Baal Kataai' } },
-  { key: 'Stitching', emoji: '🧵', label: { en: 'Stitching', hi: 'Silai' } },
+  { key: 'Silai', emoji: '🧵', label: { en: 'Stitching', hi: 'Silai' } },
 ];
 
 export default function Services() {
