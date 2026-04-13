@@ -11,6 +11,7 @@ const FILTERS = [
   { key: 'Facial', emoji: '💆', label: { en: 'Facial', hi: 'Facial' } },
   { key: 'Bridal', emoji: '👰', label: { en: 'Bridal', hi: 'Dulhan' } },
   { key: 'Mehndi', emoji: '🌿', label: { en: 'Mehndi', hi: 'Mehndi' } },
+  { key: 'Haircutting', emoji: '✂️', label: { en: 'Haircutting', hi: 'Haircutting' } },
   { key: 'Stitching', emoji: '🧵', label: { en: 'Stitching', hi: 'Silai' } },
 ];
 
