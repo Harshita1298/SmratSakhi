@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import toast from 'react-hot-toast';
 import LangText from '../components/LangText';
+const categoryEmoji = { Facial: '💆', Bridal: '👰', Mehndi: '🌿', Stitching: '🧵' ,Haircutting: '✂️'};
 
-const categoryEmoji = { Facial: '💆', Bridal: '👰', Mehndi: '🌿', Stitching: '🧵' };
 
 export default function Cart() {
   const [cart, setCart]     = useState(null);
