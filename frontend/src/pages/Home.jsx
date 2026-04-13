@@ -38,6 +38,12 @@ const serviceCategories = [
     name: { en: 'Stitching', hi: 'Silai' },
     desc: { en: 'Custom tailoring & blouses', hi: 'Kapdon ki silai aur custom fitting' },
   },
+  {
+    emoji: '✂️',
+    color: '#1e88e5',
+    name: { en: 'Haircutting', hi: 'Haircutting' },
+    desc: { en: 'Trendy cuts, layers & styling', hi: 'Trendy cuts, layers & styling' },
+  },
 ];
 
 const whyCards = [
