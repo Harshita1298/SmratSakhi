@@ -33,12 +33,6 @@ const serviceCategories = [
     desc: { en: 'Beautiful henna designs', hi: 'Haath aur pairon par khoobsurat mehndi design' },
   },
   {
-    emoji: '🧵',
-    color: '#9c27b0',
-    name: { en: 'Stitching', hi: 'Silai' },
-    desc: { en: 'Custom tailoring & blouses', hi: 'Kapdon ki silai aur custom fitting' },
-  },
-  {
     emoji: '✂️',
     color: '#1e88e5',
     name: { en: 'Haircutting', hi: 'Haircutting' },
