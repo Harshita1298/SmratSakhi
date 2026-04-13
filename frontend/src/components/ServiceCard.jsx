@@ -5,8 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import API from '../api/axios';
 import toast from 'react-hot-toast';
 
-const categoryEmoji = { Facial: '💆', Bridal: '👰', Mehndi: '🌿', Stitching: '🧵' ,Haircutting: '✂️'};
-const categoryColor = { Facial: '#e8637a', Bridal: '#c9973a', Mehndi: '#4caf50', Stitching: '#9c27b0', Haircutting: '#1e88e5' };
+const categoryEmoji = { Facial: '💆', Bridal: '👰', Mehndi: '🌿', Stitching: '🧵', 'Hair Cutting': '✂️' };
+const categoryColor = { Facial: '#e8637a', Bridal: '#c9973a', Mehndi: '#4caf50', Stitching: '#9c27b0', 'Hair Cutting': '#1e88e5' };
 
 export default function ServiceCard({ service, onCartUpdate }) {
   const { user } = useAuth();

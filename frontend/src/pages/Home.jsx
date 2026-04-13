@@ -35,7 +35,7 @@ const serviceCategories = [
   {
     emoji: '✂️',
     color: '#1e88e5',
-    name: { en: 'Haircutting', hi: 'Haircutting' },
+    name: { en: 'Hair Cutting', hi: 'Baal Kataai' },
     desc: { en: 'Trendy cuts, layers & styling', hi: 'Trendy cuts, layers & styling' },
   },
 ];
