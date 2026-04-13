@@ -2,25 +2,30 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLang } from '../context/LangContext';
 import toast from 'react-hot-toast';
 
 export default function Register() {
   const { register, loading } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', phone: '', email: '', password: '', address: '', city: 'Gorakhpur' });
+  const { t } = useLang();
 
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.phone || !form.password) { toast.error('Name, phone and password are required'); return; }
-    if (form.password.length < 6) { toast.error('Password must be at least 6 characters'); return; }
+    if (!form.name || !form.phone || !form.password) { toast.error(t('registerValidationRequired')); return; }
+    if (form.password.length < 6) { toast.error(t('registerPasswordLength')); return; }
     const res = await register(form);
     if (res.success) {
-      toast.success('Welcome to Smart Sakhi! 💄');
+      toast.success(t('registerSuccess'));
       navigate('/');
     } else {
-      toast.error(res.message);
+      const message = {
+        'Phone already registered': t('registerPhoneExists'),
+      }[res.message] || res.message || t('registerFailure');
+      toast.error(message);
     }
   };
 
@@ -29,39 +34,39 @@ export default function Register() {
       <div style={styles.card}>
         <div style={styles.header}>
           <div style={{ fontSize: 36 }}>💄</div>
-          <h2 style={styles.title}>Join Smart Sakhi</h2>
-          <p style={styles.sub}>Create your account to book beauty services</p>
+          <h2 style={styles.title}>{t('registerTitle')}</h2>
+          <p style={styles.sub}>{t('registerSubtitle')}</p>
         </div>
 
         <form onSubmit={submit} style={styles.form}>
           <div style={styles.row}>
             <div className="form-group" style={{ flex: 1 }}>
-              <label className="form-label">Full Name *</label>
-              <input className="form-input" name="name" value={form.name} onChange={handle} placeholder="Your full name" />
+              <label className="form-label">{t('fullName')}</label>
+              <input className="form-input" name="name" value={form.name} onChange={handle} placeholder={t('registerNamePlaceholder')} />
             </div>
             <div className="form-group" style={{ flex: 1 }}>
-              <label className="form-label">Phone Number *</label>
-              <input className="form-input" name="phone" value={form.phone} onChange={handle} placeholder="10-digit mobile" type="tel" maxLength={10} />
+              <label className="form-label">{t('registerPhoneLabel')}</label>
+              <input className="form-input" name="phone" value={form.phone} onChange={handle} placeholder={t('registerPhonePlaceholder')} type="tel" maxLength={10} />
             </div>
           </div>
 
           <div className="form-group">
-            <label className="form-label">Email (optional)</label>
-            <input className="form-input" name="email" value={form.email} onChange={handle} placeholder="your@email.com" type="email" />
+            <label className="form-label">{t('registerEmailLabel')}</label>
+            <input className="form-input" name="email" value={form.email} onChange={handle} placeholder={t('registerEmailPlaceholder')} type="email" />
           </div>
 
           <div className="form-group">
-            <label className="form-label">Password *</label>
-            <input className="form-input" name="password" value={form.password} onChange={handle} placeholder="Minimum 6 characters" type="password" />
+            <label className="form-label">{t('registerPasswordLabel')}</label>
+            <input className="form-input" name="password" value={form.password} onChange={handle} placeholder={t('registerPasswordPlaceholder')} type="password" />
           </div>
 
           <div style={styles.row}>
             <div className="form-group" style={{ flex: 2 }}>
-              <label className="form-label">Address</label>
-              <input className="form-input" name="address" value={form.address} onChange={handle} placeholder="Mohalla / Colony" />
+              <label className="form-label">{t('registerAddressLabel')}</label>
+              <input className="form-input" name="address" value={form.address} onChange={handle} placeholder={t('registerAddressPlaceholder')} />
             </div>
             <div className="form-group" style={{ flex: 1 }}>
-              <label className="form-label">City</label>
+              <label className="form-label">{t('registerCityLabel')}</label>
               <select className="form-input form-select" name="city" value={form.city} onChange={handle}>
                 <option>Gorakhpur</option>
                 <option>Lucknow</option>
@@ -72,15 +77,15 @@ export default function Register() {
           </div>
 
           <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '14px', marginTop: 8 }} disabled={loading}>
-            {loading ? 'Creating Account…' : 'Create Account →'}
+            {loading ? t('registerCreating') : t('registerCreateButton')}
           </button>
         </form>
 
         <div style={styles.switchText}>
-          Already have an account?{' '}
-          <Link to="/login" style={{ color: 'var(--rose)', fontWeight: 600 }}>Sign In</Link>
+          {t('registerAlreadyHave')}{' '}
+          <Link to="/login" style={{ color: 'var(--rose)', fontWeight: 600 }}>{t('login')}</Link>
         </div>
-        <Link to="/" style={styles.backLink}>← Back to Home</Link>
+        <Link to="/" style={styles.backLink}>{t('registerBackHome')}</Link>
       </div>
     </div>
   );

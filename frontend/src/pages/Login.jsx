@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLang } from '../context/LangContext';
 import toast from 'react-hot-toast';
 
 export default function Login() {
@@ -11,25 +12,32 @@ export default function Login() {
   const [show, setShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [errorType, setErrorType] = useState(null);
+  const { t } = useLang();
 
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.phone || !form.password) { toast.error('Please fill all fields'); return; }
+    if (!form.phone || !form.password) { toast.error(t('loginFillFields')); return; }
     setErrorMessage('');
     setErrorType(null);
     const res = await login(form.phone, form.password);
     if (res.success) {
-      toast.success('Welcome back! 💄');
+      toast.success(t('loginSuccess'));
       // Admin ko /admin page par, user ko home par bhejo
       setErrorMessage('');
       setErrorType(null);
       navigate(res.role === 'admin' ? '/admin' : '/');
     } else {
-      setErrorMessage(res.message);
+      const translated = {
+        'not-registered': t('loginErrorNotRegistered'),
+        'wrong-password': t('loginErrorWrongPassword'),
+      }[res.errorType];
+      const fallback = res.message || t('loginErrorGeneral');
+      const finalMessage = translated || fallback;
+      setErrorMessage(finalMessage);
       setErrorType(res.errorType || null);
-      toast.error(res.message);
+      toast.error(finalMessage);
     }
   };
 
@@ -88,12 +96,12 @@ export default function Login() {
               {loading ? 'Signing in…' : 'Sign In →'}
             </button>
             {errorMessage && <div style={styles.errorBanner}>{errorMessage}</div>}
-            {errorType === 'not-registered' && (
-              <div style={styles.registerHint}>
-                <span>Phone number abhi register nahi hai.</span>{' '}
-                <Link to="/register" style={styles.registerLink}>Abhi register karein</Link>
-              </div>
-            )}
+          {errorType === 'not-registered' && (
+            <div style={styles.registerHint}>
+              <span>{t('loginRegisterHint')}</span>{' '}
+              <Link to="/register" style={styles.registerLink}>{t('loginRegisterAction')}</Link>
+            </div>
+          )}
           </form>
 
           <div style={styles.switchText}>
