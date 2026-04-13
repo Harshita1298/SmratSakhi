@@ -63,7 +63,7 @@ exports.login = async (req, res) => {
   }
 };
 
-// @route  GET /api/auth/me
+// @route  GET /api/auth/me. Protected route, requires auth middleware
 exports.getMe = async (req, res) => {
   const user = await User.findById(req.user.id);
   res.json({ success: true, user });

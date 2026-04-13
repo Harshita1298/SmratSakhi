@@ -13,7 +13,11 @@ API.interceptors.request.use((config) => {
 API.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    const isAuthRoute =
+      err.config?.url?.includes('/auth/login') ||
+      err.config?.url?.includes('/auth/register') ||
+      err.config?.url?.includes('/auth/google');
+    if (err.response?.status === 401 && !isAuthRoute) {
       localStorage.removeItem('sakhi_token');
       localStorage.removeItem('sakhi_user');
       window.location.href = '/login';
