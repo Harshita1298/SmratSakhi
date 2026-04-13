@@ -209,6 +209,9 @@ export const T = {
   loginErrorWrongPassword: { hi: 'Password sahi nahi hai.', en: 'The password does not match.' },
   loginRegisterHint:    { hi: 'Phone register nahi hai — abhi register karein.', en: 'Phone missing? Register now.' },
   loginRegisterAction:  { hi: 'Abhi register karein', en: 'Register now' },
+  loginGoogleDivider:   { hi: '— ya —', en: '— or —' },
+  googleLoginButton:    { hi: 'Google se login karo', en: 'Sign in with Google' },
+  googleLoginDisabled:  { hi: 'Google login setup pending', en: 'Google login setup pending' },
 };
 
 // ── Provider ──────────────────────────────────────────────────

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLang } from '../context/LangContext';
+import GoogleLoginButton from '../components/GoogleLoginButton';
 import toast from 'react-hot-toast';
 
 export default function Login() {
@@ -96,12 +97,16 @@ export default function Login() {
               {loading ? 'Signing in…' : 'Sign In →'}
             </button>
             {errorMessage && <div style={styles.errorBanner}>{errorMessage}</div>}
-          {errorType === 'not-registered' && (
-            <div style={styles.registerHint}>
-              <span>{t('loginRegisterHint')}</span>{' '}
-              <Link to="/register" style={styles.registerLink}>{t('loginRegisterAction')}</Link>
+            {errorType === 'not-registered' && (
+              <div style={styles.registerHint}>
+                <span>{t('loginRegisterHint')}</span>{' '}
+                <Link to="/register" style={styles.registerLink}>{t('loginRegisterAction')}</Link>
+              </div>
+            )}
+            <div style={styles.googleSection}>
+              <div style={styles.divider}>{t('loginGoogleDivider')}</div>
+              <GoogleLoginButton label={t('googleLoginButton')} />
             </div>
-          )}
           </form>
 
           <div style={styles.switchText}>
@@ -135,6 +140,8 @@ const styles = {
   errorBanner: { marginTop: 12, padding: '10px 14px', background: '#fff1f3', color: '#8a1f39', borderRadius: 8, fontSize: 13 },
   registerHint: { marginTop: 6, fontSize: 13, color: '#7a5560', display: 'flex', flexWrap: 'wrap', gap: 6 },
   registerLink: { color: 'var(--rose)', fontWeight: 600 },
+  googleSection: { marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 },
+  divider: { textAlign: 'center', fontSize: 12, color: '#7a5560', fontWeight: 500 },
 };
 // Note: GoogleLoginButton is imported in Login.jsx — add this to the form:
 // import GoogleLoginButton from '../components/GoogleLoginButton';
