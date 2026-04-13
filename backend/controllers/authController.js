@@ -37,8 +37,20 @@ exports.login = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Phone and password required' });
 
     const user = await User.findOne({ phone }).select('+password');
-    if (!user || !(await user.matchPassword(password)))
-      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    if (!user)
+      return res.status(404).json({
+        success: false,
+        message: 'Phone number abhi register nahi hua. Pehle sign up karo.',
+        errorType: 'not-registered',
+      });
+
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch)
+      return res.status(401).json({
+        success: false,
+        message: 'Password milan nahi ho raha. Dhyan se dobara try karo.',
+        errorType: 'wrong-password',
+      });
 
     const token = generateToken(user._id);
     res.json({

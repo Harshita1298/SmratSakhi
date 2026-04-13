@@ -9,18 +9,26 @@ export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ phone: '', password: '' });
   const [show, setShow] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorType, setErrorType] = useState(null);
 
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
   const submit = async (e) => {
     e.preventDefault();
     if (!form.phone || !form.password) { toast.error('Please fill all fields'); return; }
+    setErrorMessage('');
+    setErrorType(null);
     const res = await login(form.phone, form.password);
     if (res.success) {
       toast.success('Welcome back! 💄');
       // Admin ko /admin page par, user ko home par bhejo
+      setErrorMessage('');
+      setErrorType(null);
       navigate(res.role === 'admin' ? '/admin' : '/');
     } else {
+      setErrorMessage(res.message);
+      setErrorType(res.errorType || null);
       toast.error(res.message);
     }
   };
@@ -79,10 +87,14 @@ export default function Login() {
             <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 8, padding: '14px' }} disabled={loading}>
               {loading ? 'Signing in…' : 'Sign In →'}
             </button>
+            {errorMessage && <div style={styles.errorBanner}>{errorMessage}</div>}
+            {errorType === 'not-registered' && (
+              <div style={styles.registerHint}>
+                <span>Phone number abhi register nahi hai.</span>{' '}
+                <Link to="/register" style={styles.registerLink}>Abhi register karein</Link>
+              </div>
+            )}
           </form>
-
-    
-    
 
           <div style={styles.switchText}>
             Don't have an account?{' '}
@@ -112,6 +124,9 @@ const styles = {
   demo: { background: '#fdf3e3', border: '1px solid #f0dde2', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#7a5560', marginTop: 16 },
   switchText: { textAlign: 'center', marginTop: 20, fontSize: 14, color: '#7a5560' },
   backLink: { textAlign: 'center', display: 'block', marginTop: 16, fontSize: 13, color: '#c0a0a8' },
+  errorBanner: { marginTop: 12, padding: '10px 14px', background: '#fff1f3', color: '#8a1f39', borderRadius: 8, fontSize: 13 },
+  registerHint: { marginTop: 6, fontSize: 13, color: '#7a5560', display: 'flex', flexWrap: 'wrap', gap: 6 },
+  registerLink: { color: 'var(--rose)', fontWeight: 600 },
 };
 // Note: GoogleLoginButton is imported in Login.jsx — add this to the form:
 // import GoogleLoginButton from '../components/GoogleLoginButton';
