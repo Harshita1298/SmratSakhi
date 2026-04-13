@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
 
     const user = await User.findOne({ phone }).select('+password');
     if (!user)
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: 'Phone number abhi register nahi hua. Pehle sign up karo.',
         errorType: 'not-registered',
