@@ -1,52 +1,48 @@
-# 💄 Sakhi Beauty Parlour App
-## Ranjana Ji — Gorakhpur
+# 💄 Smart Sakhi – Beauty Parlour Management System
+
+Smart Sakhi is a full-stack web application designed to simplify and digitalize beauty parlour services. It allows users to explore services, book appointments, manage carts, and interact with an AI-powered chatbot.
 
 ---
 
-## ⚡ EK CLICK MEIN CHALAYIYE
+## 🚀 Live Demo
 
-Windows par: START_KARO.bat par double-click kariye
-Mac/Linux par: ./START_KARO.sh
-
-Phir browser mein kholiye: http://localhost:5173
+🌐 Frontend: https://smrat-sakhi.vercel.app  
+🔗 Backend API: https://smratsakhi.onrender.com  
 
 ---
 
-## 👤 LOGIN
+## ✨ Features
 
-Admin (Ranjana Ji): Phone = 9999999999 | Password = admin123
-
----
-
-## 🗄️ DATABASE (.env file banaye)
-
-backend folder mein .env file banaye:
-
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/sakhi-beauty
-JWT_SECRET=SakhiBeautyGorakhpur2025Secret
-JWT_EXPIRE=30d
-RAZORPAY_KEY_ID=rzp_test_xxx
-RAZORPAY_KEY_SECRET=xxx
-CLIENT_URL=http://localhost:5173
+- 👩‍💻 User Registration & Login (JWT Authentication)
+- 💇‍♀️ Browse Beauty Services
+- 🛒 Add to Cart & Manage Orders
+- 📅 Book Appointments
+- 🤖 AI Chatbot Support
+- 💬 Reviews & Ratings
+- 🎁 Offers & Coins System
+- 🔔 Notifications
+- 🖼️ Gallery Section
+- 🛠️ Admin Panel APIs
 
 ---
 
-## 📱 APP MEIN KYA KYA HAI
+## 🛠️ Tech Stack
 
-Graahaak ke liye:
-- Register / Login (Google se bhi)
-- Services Cart Booking Payment
-- AI Chatbot (Hindi + English)
-- Reviews (Star rating)
-- Profile manage
+### Frontend:
+- React.js
+- Vite
+- Axios
+- React Router
 
-Ranjana Ji (Admin) ke liye:
-- Dashboard aaj ki kamaai
-- Digital Diary — booking add kariye
-- Reviews approve / reject
-- Reports — chart
+### Backend:
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+
+### Deployment:
+- Vercel (Frontend)
+- Render (Backend)
+- MongoDB Atlas (Database)
 
 ---
-
-Poora Hindi mein — Ranjana Ji ke liye 💕
