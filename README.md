@@ -7,7 +7,7 @@ Smart Sakhi is a full-stack web application designed to simplify and digitalize 
 ## 🚀 Live Demo
 
 🌐 Frontend: https://smrat-sakhi.vercel.app  
-🔗 Backend API: https://smratsakhi.onrender.com  
+🔗 Backend API: https://smratsakhi.onrender.com
 
 ---
 
@@ -29,18 +29,21 @@ Smart Sakhi is a full-stack web application designed to simplify and digitalize 
 ## 🛠️ Tech Stack
 
 ### Frontend:
+
 - React.js
 - Vite
 - Axios
 - React Router
 
 ### Backend:
+
 - Node.js
 - Express.js
 - MongoDB
 - Mongoose
 
 ### Deployment:
+
 - Vercel (Frontend)
 - Render (Backend)
 - MongoDB Atlas (Database)
